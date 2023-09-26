@@ -21,7 +21,18 @@ Provide zip file: [public/ella_enchanted.zip](public/ella_enchanted.zip).
 
 Arbitrary write to GOT and _fini_array sections.
 
-## Writeup
+## Writeup (ru)
+
+Нам дана программа с 3 вариантами на выбор:
+1) написать любые 8 байт куда угодно
+2) прочитать флаг в буфер
+3) вывести содержимое буфера на экран.
+
+Мы можем выбрать только один вариант для каждого запуска программы.
+
+Как видно из Dockerfile, программа не имеет защиты таблицы GOT, поэтому мы можем записать адрес функции `main` в `puts@got`, чтобы зациклить нашу программу. После этого мы хотим настроить цепочку для чтения флага и его вывода. Поэтому мы перезаписываем первую запись в `_fini_array` на `ella_open` и `strchrnul@got` на `ella_print`. Наконец, мы перезаписываем `puts@got` на `printf@plt`, чтобы выйти из цикла и выполнить цепочку `ella_open -> ella_print`.
+
+## Writeup (en)
 
 We are given program with 3 options:
 1) write any 8 bytes anywhere
