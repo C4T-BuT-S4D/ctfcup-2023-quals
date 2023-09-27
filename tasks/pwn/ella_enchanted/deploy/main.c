@@ -13,14 +13,14 @@ void __attribute__((constructor)) seccomp()
     alarm(5);
 
     scmp_filter_ctx ctx;
-	ctx = seccomp_init(SCMP_ACT_KILL);
-	seccomp_rule_add(ctx, SCMP_ACT_ALLOW, __NR_read, 0);
+    ctx = seccomp_init(SCMP_ACT_KILL);
+    seccomp_rule_add(ctx, SCMP_ACT_ALLOW, __NR_read, 0);
     seccomp_rule_add(ctx, SCMP_ACT_ALLOW, __NR_write, 0);
     seccomp_rule_add(ctx, SCMP_ACT_ALLOW, __NR_exit_group, 0);
     seccomp_rule_add(ctx, SCMP_ACT_ALLOW, __NR_newfstatat, 1, SCMP_A0(SCMP_CMP_EQ, 0));
     seccomp_rule_add(ctx, SCMP_ACT_ALLOW, __NR_lseek, 1, SCMP_A0(SCMP_CMP_EQ, 0));
     seccomp_rule_add(ctx, SCMP_ACT_ALLOW, __NR_openat, 1, SCMP_A2(SCMP_CMP_EQ, 0));
-	seccomp_load(ctx);
+    seccomp_load(ctx);
 }
 
 void setup() {
