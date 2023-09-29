@@ -1,0 +1,3 @@
+GET / App.Index
+GET /public/\*filepath Static.Serve("public")
+GET /favicon.ico 404

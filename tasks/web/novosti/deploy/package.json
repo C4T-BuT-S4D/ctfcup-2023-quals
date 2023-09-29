@@ -1,0 +1,12 @@
+{
+  "name": "novosti",
+  "version": "1.0.0",
+  "author": "renbou",
+  "scripts": {
+    "watch": "tailwindcss -i ./public/src/css/main.css -o ./public/dist/css/main.css --watch",
+    "build": "tailwindcss -i ./public/src/css/main.css -o ./public/dist/css/main.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.3"
+  }
+}
