@@ -24,9 +24,9 @@ Arbitrary write to GOT and _fini_array sections.
 ## Writeup (ru)
 
 Нам дана программа с 3 вариантами на выбор:
-1) написать любые 8 байт куда угодно
-2) прочитать флаг в буфер
-3) вывести содержимое буфера на экран.
+1) Написать любые 8 байт куда угодно.
+2) Прочитать флаг в буфер.
+3) Вывести содержимое буфера на экран.
 
 Мы можем выбрать только один вариант для каждого запуска программы.
 
@@ -35,9 +35,9 @@ Arbitrary write to GOT and _fini_array sections.
 ## Writeup (en)
 
 We are given program with 3 options:
-1) write any 8 bytes anywhere
-2) read flag to buffer
-3) write buffer contents to stdout.
+1) Write any 8 bytes anywhere.
+2) Read flag to buffer.
+3) Write buffer contents to stdout.
 
 We can only choose one option per program invocation.
 
