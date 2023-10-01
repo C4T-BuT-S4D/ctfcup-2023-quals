@@ -1,0 +1,28 @@
+{{set . "title" "Novosti"}}
+{{template "header.html" .}}
+
+<header class="px-4 max-w-screen-xl mx-auto">
+  <div class="py-12 font-serif bg-gradient-to-r from-transparent from-0% via-amber-50 to-100% flex justify-center">
+    <h1 class="font-medium text-4xl">News <span class="font-bold text-5xl">/ Share</span></h1>
+  </div>
+  <hr class="border-zinc-200" />
+</header>
+
+<main class="px-4 max-w-screen-2xl mx-auto my-8 font-serif">
+  <div class="text-center text-2xl font-medium">
+    <em>We would love for you to share your news-worthy stories with us!</em>
+  </div>
+  <form method="post" class="max-w-2xl mx-auto my-6 flex flex-col gap-4">
+    <div>
+      <label for="title" class="block px-1">Title</label>
+      <input id="title" type="text" placeholder="My Awesome Story" class="block px-1 text-xl w-full outline rounded-sm outline-1 outline-zinc-100 focus:outline-zinc-200" />
+    </div>
+    <div>
+      <label for="content" class="block px-1">Content</label>
+      <textarea id="content" placeholder="Your story summarized in a few sentences…" class="block px-1 text-xl w-full outline rounded-sm outline-1 outline-zinc-100 focus:outline-zinc-200"></textarea>
+    </div>
+    <button class="self-end px-2 py-1 bg-zinc-50 hover:bg-zinc-100 rounded-sm transition-colors">Submit for review</button>
+  </form>
+</main>
+
+{{template "footer.html" .}}
