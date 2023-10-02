@@ -50,7 +50,8 @@ char check(unsigned long addr) {
     if ((addr & 0xfffffffffff0000) == stack) return 0;
 
     // unsigned long libc = &read;
-    // if ((libc + 0x219a000 <= addr) && (addr <= libc + 0x227d00)) return 0;
+    // libc -= 0x114980;
+    // if ((libc <= addr) && (addr <= libc + 0x21b000)) return 0;
 
     bin = &init;
     bin &= 0xffffffffffff0000;
