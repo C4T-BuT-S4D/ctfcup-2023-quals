@@ -1,0 +1,9 @@
+version: "2.4"
+services:
+  web-scanner:
+    build: .
+    ports:
+      - "5050:5000"
+    restart: unless-stopped
+    environment:
+      - "FLAG=ctfcup{example}"
