@@ -1,4 +1,6 @@
-def cipolla(n, p):
+from typing import Tuple
+
+def cipolla(n: int, p: int) -> int:
     """
     Cipolla's algorithm for solving x ** 2 % p == n
     https://en.wikipedia.org/wiki/Cipolla%27s_algorithm
@@ -29,11 +31,7 @@ def cipolla(n, p):
 
     return x[0]
 
-def hensel_lifting(f, r, p, k, m=1):
-    """
-    Hensel's lemma applied for lifting polynomial equations modulo some power.
-    https://en.wikipedia.org/wiki/Hensel%27s_lemma#Using_derivatives_for_lifting_roots
-    """
+def hensel_lifting(f: int, r: int, p: int, k: int, m: int=1) -> int:
     def apply(f, x, p):
         return sum(c * pow(x, i, p) for i, c in enumerate(f)) % p
 
@@ -45,12 +43,12 @@ def hensel_lifting(f, r, p, k, m=1):
     assert(apply(f, r, p ** k) == 0)
     assert(apply(fd, r, p ** k) != 0)
 
-    res = (r - apply(f, r, p ** (k + m)) *  pow(apply(fd, r, p ** m), -1, p ** m)) % p ** (k + m)
-    assert(apply(f, res, p ** (k + m)) == 0)
-    return res
+    return (r - apply(f, r, p ** (k + m)) *  pow(apply(fd, r, p ** m), -1, p ** m)) % p ** (k + m)
 
-def sqrtmod(n, p, power=1):
+
+def sqrtmod(n: int, p: int, power: int=1) -> Tuple[int,]:
     """
+
     Square root modulo prime number using Cipolla's algorithm or know formulas.
     https://en.wikipedia.org/wiki/Quadratic_residue#Prime_or_prime_power_modulus.
     """
@@ -85,9 +83,8 @@ def sqrtmod(n, p, power=1):
         m=power - 2**power_of_2,
         ) for root in roots]
 
-    
-    return tuple(roots)
 
+    return tuple(roots)
 
 def main():
     P = 156210697680525395807405913022225672867518230561026244167727827986872503969390713836672476231008571999805186039701198600755110769232069683662242528076520947841356681828813963095451798586327341737928960287475043247361498716148634925701665205679014796308116597863844787884835055529773239054412184291949429135511

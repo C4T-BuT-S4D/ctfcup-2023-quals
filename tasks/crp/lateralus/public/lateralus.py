@@ -1,7 +1,7 @@
 P = 156210697680525395807405913022225672867518230561026244167727827986872503969390713836672476231008571999805186039701198600755110769232069683662242528076520947841356681828813963095451798586327341737928960287475043247361498716148634925701665205679014796308116597863844787884835055529773239054412184291949429135511
 N = P ** 2
 
-def matmul(a, b):
+def matmul(a: [[int]], b: [[int]]) -> [[int]]:
     assert len(a[0]) == len(a)
 
     c = [[0 for _ in range(len(b))] for _ in range(len(a))]
@@ -12,7 +12,7 @@ def matmul(a, b):
                c[i][j] = (c[i][j] + a[i][k] * b[k][j]) % N
     return c
 
-def matrix_power(matrix, power):
+def matrix_power(matrix: [[int]], power: int) -> [[int]]:
     res = [[int(i==j) for j in range(len(matrix))] for i in range(len(matrix))]
 
     while power:
@@ -22,7 +22,7 @@ def matrix_power(matrix, power):
         power //= 2
     return res
 
-def nth_fib(n):
+def nth_fib(n: int) -> int:
     matrix = [
             [0, 1],
             [1, 1]
