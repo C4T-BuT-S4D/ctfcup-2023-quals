@@ -13,7 +13,7 @@ Lets me see
 
 ## Public
 
-Provide zip file: [public/challenge.py](public/challenge.py).
+Provide python script file: [public/lateralus.py](public/lateralus.py).
 
 ## TLDR
 
