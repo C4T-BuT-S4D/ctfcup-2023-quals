@@ -10,8 +10,11 @@
 ## Deploy
 
 Need whale deployment.
-TODO: Add docker image from registry.
 
+Image: `cr.yandex/crp56e8fvolm1rqugnkf/web-scanner:latest`
+Port: `5000`
+
+Compose(local) deploy:
 ```sh
 cd deploy
 docker compose -p web-scanner up --build -d

