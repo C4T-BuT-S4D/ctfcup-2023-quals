@@ -16,9 +16,14 @@ RUN echo "nobody:x:1337:1337:::" > /etc/passwd
 RUN echo "nobody::1337:nobody" > /etc/group
 
 COPY --from=builder --chown=nobody:nobody /build/task /task
-COPY flag.txt /flag.txt
+
+ADD entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+RUN touch /flag.txt && chmod o+w /flag.txt
 
 WORKDIR /
 USER nobody
 
-CMD [ "socat", "TCP-LISTEN:13000,reuseaddr,fork", "EXEC:/task" ]
+ENV FLAG=ctfcup{flag}
+
+CMD [ "/entrypoint.sh" ]
