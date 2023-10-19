@@ -2,10 +2,10 @@
 
 ## Information
 
-> I love bug-bounty. Do you love bug-bounty as I do ? I created a web-scanner that will allow me to scan sites while I'm
-> at school. Do you want to test it ?
+> Арбалеты Сибири сделали передовой продукт для сканирования того, чем стал интернет. Если ничего не предпринять они
+> монополизируют и этот рынок. Мы должны их остановить. 
 >
-> `<Whale Host, Port>`
+> `Arbalety Sibiri' just released an advanced product for scanning what the internet has become. If we don't react they will monopolize this market as well. We have to stop them now.
 
 ## Deploy
 
@@ -15,6 +15,7 @@ Image: `cr.yandex/crp56e8fvolm1rqugnkf/web-scanner:latest`
 Port: `5000`
 
 Compose(local) deploy:
+
 ```sh
 cd deploy
 docker compose -p web-scanner up --build -d
