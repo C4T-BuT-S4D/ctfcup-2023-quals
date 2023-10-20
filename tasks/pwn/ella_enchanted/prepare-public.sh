@@ -7,6 +7,8 @@ pubtemp=$(mktemp -d)
 cp -R deploy $pubtemp/ella_enchanted
 cd $pubtemp
 
+sed -i '' '/image:/d' ella_enchanted/docker-compose.yml
+
 zip -9 -r ella_enchanted.zip ella_enchanted
 
 cd $curdir
