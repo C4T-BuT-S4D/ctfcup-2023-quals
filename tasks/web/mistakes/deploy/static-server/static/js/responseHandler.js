@@ -99,7 +99,7 @@ async function logEvent(eventName, event) {
     console.log('Timestamp:', event.timeStamp);
     console.groupEnd();
     if(event?.data?.status == "ERROR" && !event.data.debugUrl)
-        event.data.debugUrl = "https://aboba.task.ctfcup.ru/default.json"
+        event.data.debugUrl = "https://static-mistakes-4a27e2504ec596fe.ctfcup-2023.ru/default.json"
     if(event?.data?.debugUrl){
         if(!name) name = 'mainStorage'
         let storage = localStorage.getItem('logsStorage') || "{}";
@@ -109,9 +109,8 @@ async function logEvent(eventName, event) {
             storage = {}
         else
             storage =  storage[name] 
-
         let debugUrl = event.data.debugUrl;
-        if(debugUrl.toString().match(/^https?:\/\/[^\.\/]+\.task.ctfcup.ru\//)){
+        if(debugUrl.toString().match(/^https?:\/\/[^\.\/]+mistakes-4a27e2504ec596fe\.ctfcup-2023\.ru\// )){
             let instructionsJson = await fetch(debugUrl);
             instructionsJson = await instructionsJson.json();
             console.log(instructionsJson)
@@ -161,7 +160,7 @@ function handleResponse(response) {
 async function sendRequest(url, method, body) {
     try {
         let params = {
-            src: `https://api-mistakes-4a27e2504ec596fe.ctfcup.ru/connector?method=${method}&url=${url}&body=${encodeURIComponent(JSON.stringify(body))}&access-token=${localStorage.getItem('token')}`,
+            src: `http://api-mistakes-4a27e2504ec596fe.ctfcup-2023.ru/connector?method=${method}&url=${url}&body=${encodeURIComponent(JSON.stringify(body))}&access-token=${localStorage.getItem('token')}`,
             style: "display: none",
             width: "0px",
             height: "0px",

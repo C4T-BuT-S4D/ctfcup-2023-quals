@@ -16,10 +16,11 @@ const visit = async url => {
 		
 		context = await browser.createIncognitoBrowserContext()
 		const page1 = await context.newPage()
-		await page1.goto("https://static-mistakes-4a27e2504ec596fe.ctfcup.ru/")
-        await page.evaluate(() => {
-            localStorage.setItem('flag', 'ctfcup{380f99f77826f5fc0af980915f9c375d}');
-        });	  
+		await page1.goto(process.env.STATIC_BASE)
+		const FLAG = process.env.FLAG;
+        await page1.evaluate(FLAG => {
+            localStorage.setItem('flag', FLAG);
+        },FLAG);	  
 	  	console.log(`Go to ${url}`)
 		await page1.goto(url)
 		await sleep(5000)

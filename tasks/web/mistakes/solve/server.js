@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-const HOST = "http://127.0.0.1:5555"; //change me
+const HOST = "http://89.23.107.52:5555"; //change me
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 

@@ -459,7 +459,7 @@ app.get('/report', (req, res) => {
 
 app.post('/report',limiter, (req, res) => {
     const reportedLink = req.body.link;
-    visit(req.body.link);
+    visit(reportedLink);
     res.send('Link reported successfully!');
 });
 
@@ -486,5 +486,5 @@ app.get('/styles/styles.css', async (req, res) => {
 });
 
 app.listen(3001, () => {
-    console.log('API server is running on https://api-mistakes-4a27e2504ec596fe.ctfcup.ru');
+    console.log('API server is running on http://localhost:3001');
 });

@@ -1,10 +1,10 @@
-# pwn | ella_enchanted
+# web | mistakes
 
 ## Information
 
 > JavaScript teaches us to embrace mistakes and turn them into opportunities
 > 
-> `static-mistakes-4a27e2504ec596fe.ctfcup.ru`
+> `static-mistakes-4a27e2504ec596fe.ctfcup-2023.ru`
 
 ## Deploy
 
@@ -58,7 +58,7 @@ Prototype pollution via window name, bypass regex
    Но для этого необходимо обойти regex, что можно сделать, предоставив IPv6 url:
 
     ```
-    http://[::-1]:#.task.ctfcup.ru
+    http://[::-1]:#.ctfcup-2023.ru
     ```
 
 5. После этого находим chain для XSS в функции вставки элемента:
@@ -113,7 +113,7 @@ Prototype pollution via window name, bypass regex
    To do this, it is necessary to bypass regex, which can be done by providing an IPv6 URL:
 
     ```
-    http://[::-1]:#.task.ctfcup.ru
+    http://[::-1]:#.ctfcup-2023.ru
     ```
 
 5. Then, find a chain for XSS in the element insertion function:
@@ -134,8 +134,8 @@ Prototype pollution via window name, bypass regex
 
 ## Domain
 
-static-mistakes-4a27e2504ec596fe.ctfcup.ru
-api-mistakes-4a27e2504ec596fe.ctfcup.ru
+static-mistakes-4a27e2504ec596fe.ctfcup-2023.ru
+api-mistakes-4a27e2504ec596fe.ctfcup-2023.ru
 
 
 ## Cloudflare
