@@ -11,8 +11,8 @@ cd $pubtemp
 
 sed -r -i '' 's/ctfcup\{[^}]+\}/ctfcup{fake_flag}/g' mistakes/docker-compose.yaml
 
-zip -9 -r task.zip mistakes
+zip -9 -r web-mistakes.zip mistakes
 
 cd $curdir
-mv $pubtemp/task.zip public/
+mv $pubtemp/web-mistakes.zip public/
 rm -rf $pubtemp
