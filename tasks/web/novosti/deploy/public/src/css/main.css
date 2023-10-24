@@ -26,6 +26,24 @@
   font-style: normal;
 }
 
+.icon-ru {
+  background-image: url("../img/flag-ru.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-size: 100%;
+  width: 3rem;
+  height: 1.5rem;
+}
+
+.icon-uk {
+  background-image: url("../img/flag-uk.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-size: 100%;
+  width: 3rem;
+  height: 1.5rem;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -1,3 +1,5 @@
-GET / App.Share
+GET / News.Share
+POST / News.Share
+GET /lang Lang.Locale
 GET /public/*filepath Static.Serve("public")
 GET /favicon.ico 404

@@ -5,6 +5,8 @@ go 1.21.1
 require (
 	github.com/revel/modules v1.1.0
 	github.com/revel/revel v1.1.0
+	gitlab.com/NebulousLabs/fastrand v0.0.0-20181126182046-603482d69e40
+	google.golang.org/protobuf v1.31.0
 )
 
 require (
@@ -21,6 +23,7 @@ require (
 	github.com/revel/log15 v2.11.20+incompatible // indirect
 	github.com/revel/pathtree v0.0.0-20140121041023-41257a1839e9 // indirect
 	github.com/xeonx/timeago v1.0.0-rc4 // indirect
+	golang.org/x/crypto v0.0.0-20220214200702-86341886e292 // indirect
 	golang.org/x/net v0.0.0-20220412020605-290c469a71a5 // indirect
 	golang.org/x/sys v0.0.0-20220227234510-4e6760a101f9 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect

@@ -1,12 +1,22 @@
 package app
 
 import (
+	"novosti/app/filters"
+	"novosti/app/storage"
+	"os"
+
 	"github.com/revel/revel"
 )
 
+// Build variables
 var (
 	AppVersion string
 	BuildTime  string
+)
+
+// Global state
+var (
+	NewsRepository *storage.NewsRepository
 )
 
 func init() {
@@ -18,7 +28,7 @@ func init() {
 		revel.SessionFilter,           // Restore and write the session cookie.
 		revel.FlashFilter,             // Restore and write the flash cookie.
 		revel.ValidationFilter,        // Restore kept validation errors and save new ones from cookie.
-		revel.I18nFilter,              // Resolve the requested language
+		filters.I18nFilter,            // Resolve the requested language
 		HeaderFilter,                  // Add some security based headers
 		revel.InterceptorFilter,       // Run interceptors around the action.
 		revel.CompressFilter,          // Compress the result.
@@ -26,12 +36,16 @@ func init() {
 		revel.ActionInvoker,           // Invoke the action.
 	}
 
-	// Register startup functions with OnAppStart
-	// revel.DevMode and revel.RunMode only work inside of OnAppStart. See Example Startup Script
-	// ( order dependent )
-	// revel.OnAppStart(ExampleStartupScript)
-	// revel.OnAppStart(InitDB)
-	// revel.OnAppStart(FillCache)
+	revel.OnAppStart(initDB)
+}
+
+func initDB() {
+	directory := os.Getenv("NOVOSTI_DIR_PATH")
+	if directory == "" {
+		panic("NOVOSTI_DIR_PATH env var is empty, news repository will fail")
+	}
+
+	NewsRepository = storage.NewNewsRepository(directory)
 }
 
 var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {

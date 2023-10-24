@@ -8,7 +8,8 @@ module.exports = {
       pathTransform: (newPath) => {
         return path.join(
           path.dirname(newPath),
-          "../../fonts",
+          "../../",
+          path.basename(path.dirname(newPath)),
           path.basename(newPath)
         );
       },
