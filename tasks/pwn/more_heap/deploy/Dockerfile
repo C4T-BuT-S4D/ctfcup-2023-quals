@@ -1,13 +1,29 @@
+FROM ubuntu:22.04@sha256:b492494d8e0113c4ad3fe4528a4b5ff89faa5331f7d52c5c138196f69ce176a6 as builder
+
+RUN apt update && apt install -y gcc
+
+WORKDIR /build
+
+COPY more_heap.c .
+
+RUN gcc -Wl,-z,relro,-z,now -o more_heap more_heap.c
+
 FROM ubuntu:22.04@sha256:b492494d8e0113c4ad3fe4528a4b5ff89faa5331f7d52c5c138196f69ce176a6
 
-RUN apt update
-RUN apt install socat -yyq
+RUN apt update && apt install -y socat
 
-RUN useradd -M -s /bin/false ctf
+RUN echo "nobody:x:1337:1337:::" > /etc/passwd
+RUN echo "nobody::1337:nobody" > /etc/group
 
-WORKDIR /app
-COPY vuln flag.txt /app
+COPY --from=builder --chown=nobody:nobody /build/more_heap /more_heap
 
-USER ctf
+ADD entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+RUN touch /flag.txt && chmod o+w /flag.txt
 
-CMD ["socat", "TCP-LISTEN:13001,reuseaddr,fork", "EXEC:/app/vuln"]
+WORKDIR /
+USER nobody
+
+ENV FLAG=ctfcup{flag}
+
+CMD [ "/entrypoint.sh" ]

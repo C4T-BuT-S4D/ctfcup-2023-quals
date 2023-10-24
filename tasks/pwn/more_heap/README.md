@@ -13,13 +13,13 @@ docker compose -p more-heap up --build -d
 
 ## Public
 
-Provide zip file [public/more-heap.zip](./public/more-heap.zip)
+Provide zip file [public/more_heap.zip](./public/more_heap.zip)
 
 ## TLDR
 
 - arbitrary write using 2free
 - get heap, libc, stack leak
-- rewrite `strchrnul` in .got to `puts`, rewrite `_IO_2_1_stdout_` to call `read(0, &stack, 0x100)` on calling `puts`, call `__stack_chk_fail` to call `strchrnul`
+- rewrite `strchrnul` in .got to `puts`, rewrite `_IO_2_1_stdout_` to call `read(0, &stack, 0x100)` on calling `puts`, call `free` with invalid argument to call `strchrnul`
 - write rop to read flag
 
 ## Writeup (ru)
@@ -59,10 +59,15 @@ Provide zip file [public/more-heap.zip](./public/more-heap.zip)
     ```
 3. Теперь можно перезаписать размер какого-либо чанка на 0x460, освободить его и ликнуть либсу
 4. Создать чанк по адресу `libc.sym['environ']-0x10` и записать 0x10 ненулевых байт. При выводе заметки выводится все до первого 0-байта, поэтому так мы ликнем адрес стека.
-5. Нам надо прочитать флаг с помощью `open`, `read`, `write`. Сразу выделить чанк на стеке и записать rop не получится из-за проверки. Вместо этого мы можем попробовать выделить чанк на стеке в том месте, где находится канарейка. Тогда при вызове `free` канарейка перетрется и вызовется `__stack_chk_fail` (для того, чтобы `free` отработал без ошибок, надо в buf, который находится перед канарейкой, записать валидный хедер для чанка).
-6. `__stack_chk_fail` вызовет `strchrnul` из .got либсы. Этот указатель из .got мы заранее перепишем на адрес `puts`. 
-7. `puts` вызовет `stdout->vtable[7]`. Предполагается, что так вызовется функция `_IO_file_xsputn`. Но мы можем переписать `stdout->vtable` так, чтобы вместо `_IO_file_xsputn` вызвался `_IO_obstack_overflow`. Более подробно код этой функции можно посмотреть [здесь](https://elixir.bootlin.com/glibc/glibc-2.35/source/libio/obprintf.c#L39). Если вкратце, то эта функция воспримет `stdout` как структуру `_IO_obstack_file`, и если `stdout->obstack->next_free + 1 > stdout->obstack->chunk_limit`, вызовется [`_obstack_newchunk`](https://elixir.bootlin.com/glibc/glibc-2.35/source/malloc/obstack.c#L245). `_obstack_newchunk` проверит, что `stdout->obstack->use_extra_arg != 0`, и если это так, вызовет `stdout->obstack->chunkfun(stdout->obstack->extra_arg, stdout->obstack->chunk_size)`. При этом в rdx будет лежать `stdout->obstack->alignment_mask`, то есть, переписав `stdout->vtable` и переписав `stdout+0xe0` (по этому оффсету должен лежать указатель на `struct obstack*`) на фейковую структуру, мы сможем вызвать read и записать rop на стек.
- 
+5. `free` проверяет, что переданный ему указатель является валидным указателем на чанк. Если это не так, вызовется `malloc_printerr` и получится следующая цепочка вызовов:
+   ```
+   malloc_printerr (const char *str)
+     __libc_message (do_abort, "%s\n", str)
+       __strchrnul
+   ```
+   `__strchrnul` находится в .got либсы. Мы можем его заранее переписать на что-то другое, например, на `puts`. 
+6. `puts` вызовет `stdout->vtable[7]`. Предполагается, что так вызовется функция `_IO_file_xsputn`. Но мы можем переписать `stdout->vtable` так, чтобы вместо `_IO_file_xsputn` вызвался [`_IO_obstack_overflow`](https://elixir.bootlin.com/glibc/glibc-2.35/source/libio/obprintf.c#L39). Эта функция воспримет `stdout` как структуру `_IO_obstack_file`, и если [`stdout->obstack->next_free + 1 > stdout->obstack->chunk_limit`](https://elixir.bootlin.com/glibc/glibc-2.35/source/malloc/obstack.h#L317), вызовется [`_obstack_newchunk`](https://elixir.bootlin.com/glibc/glibc-2.35/source/malloc/obstack.c#L245). `_obstack_newchunk` проверит, что [`stdout->obstack->use_extra_arg != 0`](https://elixir.bootlin.com/glibc/glibc-2.35/source/malloc/obstack.c#L121), и если это так, вызовет `stdout->obstack->chunkfun(stdout->obstack->extra_arg, stdout->obstack->chunk_size)`. При этом в rdx будет лежать `stdout->obstack->alignment_mask`, то есть, переписав `stdout->vtable` и переписав `stdout+0xe0` (по этому оффсету должен лежать указатель на `struct obstack*`) на фейковую структуру, мы сможем вызвать `read` и записать rop на стек.
+
 [Exploit](./solve/sploit.py)
 
 ## Writeup (en)
@@ -100,9 +105,14 @@ Provide zip file [public/more-heap.zip](./public/more-heap.zip)
     ```
 3. Now we can free fake chunk of size 0x460 and get libc leak.
 4. To get stack leak we should create chunk at `libc.sym['environ']-0x10` and write some 0x10 bytes. On printing note program write to stdout everything until it gets null byte, so we will get stack leak.
-5. We can't just allocate chunk on stack and write rop because of check. But we can create chunk near the canary. Then `free` will overwrite canary, which leads to `__stack_chk_fail` (because of `free` we should also write valid chunk header at buf which is placed before canary).
-6. `__stack_chk_fail` will call `strchrnul` from libc .got . This pointer we will overwrite to `puts` address.
-7. `puts` will call `stdout->vtable[7]`. Usually this calls `_IO_file_xsputn`. But we can overwrite `stdout->vtable` to call [`_IO_obstack_overflow`](https://elixir.bootlin.com/glibc/glibc-2.35/source/libio/obprintf.c#L39) instead of `_IO_file_xsputn`. This function will interpret `stdout` as `struct _IO_obstack_file` and call [`_obstack_newchunk`](https://elixir.bootlin.com/glibc/glibc-2.35/source/malloc/obstack.c#L245) if `stdout->obstack->next_free + 1 > stdout->obstack->chunk_limit`. `_obstack_newchunk` will call `stdout->obstack->chunkfun(stdout->obstack->extra_arg, stdout->obstack->chunk_size)` if `stdout->obstack->use_extra_arg != 0`. Also we will have `stdout->obstack->alignment_mask` in rdx, so if we rewrite `stdout->vtable` and rewrite `stdout+0xe0` (this is an offset of `struct obstack*` pointer) to fake struct, we will be able to call read and write rop on stack.
+5. `free` checks that passed argument is a valid pointer. It it's false, it will call `malloc_printerr` and we will get the following call chain:
+    ```
+   malloc_printerr (const char *str)
+     __libc_message (do_abort, "%s\n", str)
+       __strchrnul
+    ```
+    `__strchrnul` is a pointer from libc .got . We can rewrite it to something else, for example, to `puts`.
+6. `puts` will call `stdout->vtable[7]`. Usually this calls `_IO_file_xsputn`. But we can overwrite `stdout->vtable` to call [`_IO_obstack_overflow`](https://elixir.bootlin.com/glibc/glibc-2.35/source/libio/obprintf.c#L39) instead of `_IO_file_xsputn`. This function will interpret `stdout` as `struct _IO_obstack_file` and call [`_obstack_newchunk`](https://elixir.bootlin.com/glibc/glibc-2.35/source/malloc/obstack.c#L245) if `stdout->obstack->next_free + 1 > stdout->obstack->chunk_limit`. `_obstack_newchunk` will call `stdout->obstack->chunkfun(stdout->obstack->extra_arg, stdout->obstack->chunk_size)` if `stdout->obstack->use_extra_arg != 0`. Also we will have `stdout->obstack->alignment_mask` in rdx, so if we rewrite `stdout->vtable` and rewrite `stdout+0xe0` (this is an offset of `struct obstack*` pointer) to fake struct, we will be able to call read and write rop on stack.
 
 [Exploit](./solve/sploit.py)
 

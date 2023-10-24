@@ -5,24 +5,12 @@ set -e
 curdir=$(pwd)
 pubtemp=$(mktemp -d)
 
-cd deploy/
-docker build -f build.Dockerfile -t build-more-heap .
-docker run --name build-more-heap-1 build-more-heap
-docker cp build-more-heap-1:/build/vuln .
-docker rm build-more-heap-1
-docker rmi build-more-heap
-
-cd $curdir
-mkdir -p $pubtemp/more-heap
-cp deploy/vuln solve/
-cp deploy/vuln $pubtemp/more-heap
-cp deploy/Dockerfile $pubtemp/more-heap
-
-
+cp -R deploy $pubtemp/more_heap
 cd $pubtemp
-zip -r more-heap.zip more-heap
+
+zip -r more_heap.zip more_heap
 
 cd $curdir
-mv $pubtemp/more-heap.zip public/
+mv $pubtemp/more_heap.zip public
 
 rm -rf $pubtemp

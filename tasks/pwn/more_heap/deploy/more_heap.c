@@ -9,10 +9,6 @@
 
 #define MAX_NOTES 10
 
-void menu() {
-    write(1, "1. Add\n2. Delete\n3. Edit\n4. Show\n5. Exit\n\n> ", 44);
-}
-
 void init() {
     struct sock_filter filter[] = {
         {0x20, 0, 0, 0x00000004},
@@ -49,10 +45,6 @@ char check(unsigned long addr) {
     stack &= 0xffffffffffff0000;
     if ((addr & 0xfffffffffff0000) == stack) return 0;
 
-    // unsigned long libc = &read;
-    // libc -= 0x114980;
-    // if ((libc <= addr) && (addr <= libc + 0x21b000)) return 0;
-
     bin = &init;
     bin &= 0xffffffffffff0000;
     if ((addr & 0xfffffffffff0000) == bin) return 0;
@@ -68,26 +60,17 @@ void add() {
         write(1, "BAN\n", 4);
         return;
     }
-    char buf[0x10];
-    *(long*)(buf) = 0;
-    *(long*)(buf+8) = 0;
-    write(1, "Note: ", 6);
-    read(0, buf, sizeof(buf));
-    for (int i = 0; i < 0x10; ++i) {
-        if (*(unsigned int*)(buf+i) == 0x67616c66) {
-            write(1, "BAN\n", 4);
-            return;
-        }
-    }
-    notes[idx] = malloc(sizeof(buf));
+    notes[idx] = malloc(0x10);
     if (!check(notes[idx])) {
         free(notes[idx]);
         notes[idx] = 0;
         write(1, "BAN\n", 4);
         return;
     }
-    *(long*)(notes[idx]) = *(long*)(buf);
-    *(long*)(notes[idx]+8) = *(long*)(buf+8);
+    *(long*)(notes[idx]) = 0;
+    *(long*)(notes[idx]+8) = 0;
+    write(1, "Note: ", 6);
+    read(0, notes[idx], 0x10);
 }
 
 void delete() {
@@ -116,16 +99,11 @@ void show() {
     write(1, "\n", 1);
 }
 
-void edit() {
-    write(1, "What?\n", 6);
-}
-
-
 int main() {
     init();
     char s[4] = {};
     while (1) {
-        menu();
+        write(1, "1. Add\n2. Delete\n3. Show\n4. Exit\n\n> ", 37);
         read(0, &s, 2);
         if (s[1] != '\0' && s[1] != '\n') {
             write(1, "Invalid choice\n", 15);
@@ -138,19 +116,9 @@ int main() {
             delete();
         }
         else if (s[0] == '3') {
-            edit();
-        }
-        else if (s[0] == '4') {
             show();
         }
-        else if (s[0] == '5') {
-            // __asm__(
-            //     ".intel_syntax noprefix;"
-            //     "xor edi, edi;"
-            //     "mov eax, 0x3c;"
-            //     "syscall;"
-            //     ".att_syntax;"
-            // );
+        else if (s[0] == '4') {
             _exit(0);
         }
         else {
