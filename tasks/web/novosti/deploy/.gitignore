@@ -1,5 +1,3 @@
-test-results/
-app/tmp/
-app/routes/
+novosti-flag
+novosti-admin-token
 node_modules/
-news/

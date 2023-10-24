@@ -2,7 +2,9 @@ package storage
 
 import (
 	"encoding/base32"
+	"errors"
 	"fmt"
+	"io/fs"
 	"novosti/app/storage/model"
 	"os"
 	"path/filepath"
@@ -10,6 +12,8 @@ import (
 	"gitlab.com/NebulousLabs/fastrand"
 	"google.golang.org/protobuf/proto"
 )
+
+var ErrNotFound = errors.New("entity not found")
 
 // NewsStory represents a single news story saved by the repository.
 type NewsStory struct {
@@ -51,6 +55,23 @@ func (nr *NewsRepository) CreateStory(story NewsStory) (StoryID, error) {
 	}
 
 	return id, nil
+}
+
+// GetStory gets an existing story by its ID.
+func (nr *NewsRepository) GetStory(id StoryID) (NewsStory, error) {
+	data, err := os.ReadFile(filepath.Join(nr.directory, string(id)))
+	if errors.Is(err, fs.ErrNotExist) {
+		return NewsStory{}, ErrNotFound
+	} else if err != nil {
+		return NewsStory{}, fmt.Errorf("reading story file: %w", err)
+	}
+
+	var story model.NewsStory
+	if err := proto.Unmarshal(data, &story); err != nil {
+		return NewsStory{}, fmt.Errorf("unmarshaling story model: %w", err)
+	}
+
+	return NewsStory{Title: story.Title, Content: story.Content}, nil
 }
 
 var idEncoding = base32.StdEncoding.WithPadding(base32.NoPadding)

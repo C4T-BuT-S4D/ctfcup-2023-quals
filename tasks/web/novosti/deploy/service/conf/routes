@@ -1,5 +1,5 @@
 GET / News.Share
 POST / News.Share
-GET /lang Lang.Locale
+GET /news/:id Admin.View
 GET /public/*filepath Static.Serve("public")
 GET /favicon.ico 404

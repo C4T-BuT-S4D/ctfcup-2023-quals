@@ -17,6 +17,7 @@ var (
 // Global state
 var (
 	NewsRepository *storage.NewsRepository
+	AdminToken     string
 )
 
 func init() {
@@ -37,6 +38,7 @@ func init() {
 	}
 
 	revel.OnAppStart(initDB)
+	revel.OnAppStart(initAdminToken)
 }
 
 func initDB() {
@@ -48,11 +50,18 @@ func initDB() {
 	NewsRepository = storage.NewNewsRepository(directory)
 }
 
+func initAdminToken() {
+	token := os.Getenv("NOVOSTI_ADMIN_TOKEN")
+	if token == "" {
+		panic("NOVOSTI_ADMIN_TOKEN env var is empty, admin will not be able to view shared news")
+	}
+
+	AdminToken = token
+}
+
 var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {
 	c.Response.Out.Header().Add("X-Frame-Options", "SAMEORIGIN")
-	c.Response.Out.Header().Add("X-XSS-Protection", "1; mode=block")
-	c.Response.Out.Header().Add("X-Content-Type-Options", "nosniff")
-	c.Response.Out.Header().Add("Referrer-Policy", "strict-origin-when-cross-origin")
+	c.Response.Out.Header().Add("Content-Security-Policy", "default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';")
 
 	fc[0](c, fc[1:])
 }

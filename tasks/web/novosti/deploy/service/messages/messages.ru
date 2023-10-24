@@ -8,3 +8,4 @@ page.Share.content.content = Содержание
 page.Share.content.content.placeholder = Краткий пересказ Вашей новости…
 page.Share.content.submit = Отправить на оценку
 page.Share.content.thanks = Спасибо большое за то, что поделились,<br>мы постараемся просмотреть вашу новость как можно скорее!
+page.Suggestions.title = Предложенное

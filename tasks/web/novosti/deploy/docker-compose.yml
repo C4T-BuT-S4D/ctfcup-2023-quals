@@ -1,0 +1,47 @@
+services:
+  files:
+    build: ./files
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 128M
+    secrets:
+      - source: novosti-flag
+        target: /static/flag
+    ports:
+      - "9888:8080"
+    restart: unless-stopped
+  bot:
+    build: ./bot
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 1G
+    environment:
+      REDIS_URL: redis://redis:6379
+      ADMIN_TOKEN_FILE: /run/secrets/novosti-admin-token
+    secrets:
+      - novosti-admin-token
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+  redis:
+    image: redis:7.2.2-alpine3.18
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 512M
+    healthcheck:
+      test: redis-cli ping
+      interval: 5s
+      timeout: 3s
+    restart: unless-stopped
+secrets:
+  novosti-flag:
+    file: ./novosti-flag
+  novosti-admin-token:
+    file: ./novosti-admin-token
