@@ -1,0 +1,11 @@
+version: '2.4'
+
+services:
+  pwn:
+    build: .
+    ports:
+      - "13001:13001"
+    restart: unless-stopped
+    cpus: 1
+    pids_limit: 64
+    mem_limit: 512m
