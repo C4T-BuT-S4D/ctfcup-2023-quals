@@ -9,6 +9,8 @@ services:
     cpus: 1
     pids_limit: 64
     mem_limit: 512m
+    environment:
+      - FLAG=ctfcup{flag}
     healthcheck:
       test: ["CMD", "/bin/sh", "-c", "[ \"$(sha256sum ./flag.txt | awk '{print $1}')\" = \"4748008ef03d4ee310e863f55e820515c4337f6afcc3767f2fde27826e91644a\" ] || kill 1"]
       interval: 30s
