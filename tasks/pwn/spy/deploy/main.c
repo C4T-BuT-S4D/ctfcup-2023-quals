@@ -6,7 +6,7 @@
 #include <seccomp.h>
 #include <syscall.h>
 
-char ella_buf[0x100];
+char spy_msg[0x100];
 
 void __attribute__((constructor)) seccomp()
 {
@@ -26,11 +26,11 @@ void __attribute__((constructor)) seccomp()
 void setup() {
     setvbuf(stdout, NULL, _IONBF, 0);
     setvbuf(stderr, NULL, _IONBF, 0);
-    strcpy(ella_buf, "New laws oppressing elves and giants were issued!");
+    strcpy(spy_msg, "-- . --. .- .-.. .. - .... / ... . .-. ...- . .-. / .. ... / .-.. --- -.-. .- - . -.. / .. -. / - .... . / ... . -.-. --- -. -.. / ... . -.-. - --- .-. / --- ..-. / -- . - .-. .- / ...- . . -.- .... .. -- --..-- / .---- -....- ...-- .-.-.- ..---");
 }
 
 void menu() {
-    printf("Hi! I'm Ella Enchanted and you can ask me anything!\nType 1 to send a letter\nType 2 to open a Christmas present box\nType 3 to read a newspaper\nChoice: ");
+    printf("Type 1 to send a message\nType 2 to get a message from CVR\nType 3 to read a message\nChoice: ");
 }
 
 int read_option() {
@@ -39,26 +39,26 @@ int read_option() {
     return x;
 }
 
-void ella_write() {
-    printf("Enter text of the letter: ");
+void spy_write() {
+    printf("Enter text of the message: ");
     unsigned long long text = 0;
     scanf("%llx", &text);
-    printf("Enter destination of the letter: ");
+    printf("Enter destination of the message: ");
     unsigned long long destination = 0;
     scanf("%llx", &destination);
     *(unsigned long long *)(destination) = text;
-    puts("I've sent your letter!");
+    puts("I've sent your message!");
 }
 
-void ella_open() {
+void spy_open() {
     int fd = open("/flag.txt", O_RDONLY);
-    read(fd, ella_buf, 0x100);
-    *strchrnul(ella_buf, '\n') = '\0';
-    puts("I've opened a Christmas present box!");
+    read(fd, spy_msg, 0x100);
+    *strchrnul(spy_msg, '\n') = '\0';
+    puts("I've got the message from CVR!");
 }
 
-void ella_print() {
-    puts(ella_buf);
+void spy_print() {
+    puts(spy_msg);
 }
 
 void incorrect_option() {
@@ -71,11 +71,11 @@ int main() {
     int option = read_option();
 
     if (option == 1) {
-        ella_write();
+        spy_write();
     } else if (option == 2) {
-        ella_open();
+        spy_open();
     } else if (option == 3) {
-        ella_print();
+        spy_print();
     } else {
         incorrect_option();
     }
