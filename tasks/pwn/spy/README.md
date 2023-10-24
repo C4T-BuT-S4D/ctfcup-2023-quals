@@ -46,6 +46,3 @@ After that we want to setup chain to read flag and output it. So we overwrite fi
 
 [Exploit](solve/sploit.py)
 
-## Flag
-
-ctfcup{9b9a88751771e3b66c0f10e69cd5d6c8}
