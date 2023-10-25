@@ -1,5 +1,7 @@
 # web | novosti
 
+![novosti share page](./screenshots/novosti.png)
+
 ## Information
 
 TODO
