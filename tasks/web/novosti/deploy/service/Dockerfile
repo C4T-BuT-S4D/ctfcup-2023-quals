@@ -12,7 +12,7 @@ COPY conf conf
 RUN --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.cache/go-build \
     go install github.com/revel/cmd/revel@v1.1.0 && \
-    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 revel package .
+    CGO_ENABLED=0 GOOS=linux revel package .
 
 WORKDIR /service
 RUN tar xzvf /build/build.tar.gz
