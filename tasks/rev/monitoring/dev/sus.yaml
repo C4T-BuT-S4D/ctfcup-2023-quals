@@ -1,6 +1,6 @@
 transforms:
   obfuscateNames: true
-  obfuscateBooleans: false
+  obfuscateBooleans: true
 
   keyObfuscationLevel: 3
   stringObfLevel: 3
