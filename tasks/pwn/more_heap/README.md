@@ -2,7 +2,7 @@
 
 ## Information
 
-> nc more-heap-8e5999dafa8f5ae2.ctfcup.ru 13001
+> nc 0 13001
 
 ## Deploy
 
@@ -115,19 +115,3 @@ Provide zip file [public/more_heap.zip](./public/more_heap.zip)
 6. `puts` will call `stdout->vtable[7]`. Usually this calls `_IO_file_xsputn`. But we can overwrite `stdout->vtable` to call [`_IO_obstack_overflow`](https://elixir.bootlin.com/glibc/glibc-2.35/source/libio/obprintf.c#L39) instead of `_IO_file_xsputn`. This function will interpret `stdout` as `struct _IO_obstack_file` and call [`_obstack_newchunk`](https://elixir.bootlin.com/glibc/glibc-2.35/source/malloc/obstack.c#L245) if `stdout->obstack->next_free + 1 > stdout->obstack->chunk_limit`. `_obstack_newchunk` will call `stdout->obstack->chunkfun(stdout->obstack->extra_arg, stdout->obstack->chunk_size)` if `stdout->obstack->use_extra_arg != 0`. Also we will have `stdout->obstack->alignment_mask` in rdx, so if we rewrite `stdout->vtable` and rewrite `stdout+0xe0` (this is an offset of `struct obstack*` pointer) to fake struct, we will be able to call read and write rop on stack.
 
 [Exploit](./solve/sploit.py)
-
-## Domain
-
-```
-more-heap-8e5999dafa8f5ae2.ctfcup.ru
-```
-
-## Cloudflare
-
-No
-
-## Flag
-
-```
-ctfcup{dc108609eacf3f44ef5db8e6d2e25d0f}
-```
