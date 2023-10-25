@@ -2,7 +2,7 @@ version: "2.4"
 services:
   pwn:
     build: .
-    image: "cr.yandex/crp56e8fvolm1rqugnkf/pwn-ella:latest"
+    image: "cr.yandex/crp56e8fvolm1rqugnkf/pwn-spy:latest"
     ports:
       - "13000:13000"
     restart: unless-stopped
