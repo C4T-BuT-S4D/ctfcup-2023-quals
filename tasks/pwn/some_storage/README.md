@@ -2,7 +2,7 @@
 
 ## Information
 
-> nc some-storage-6473a3872d2d1c1e.ctfcup.ru 13002
+> nc 0 13002
 
 ## Deploy
 
@@ -94,19 +94,3 @@ If we try to rewrite `free_list` and create new task, we will get the following:
 Finally we need to rewrite some `free_list` to vtable, create task for this user and rewrite vtable to execute shellcode from mmaped task
 
 [Exploit](./solve/sploit.py)
-
-## Domain
-
-```
-some-storage-6473a3872d2d1c1e.ctfcup.ru
-```
-
-## Cloudflare
-
-No
-
-## Flag
-
-```
-ctfcup{e6f5f91aaaf1fde9dcdf430949c5c8f0}
-```

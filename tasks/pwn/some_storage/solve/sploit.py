@@ -2,7 +2,7 @@
 import sys
 from pwn import *
 
-context.binary = exe = ELF('./vuln')
+context.binary = exe = ELF('./some_storage')
 
 if args.LOCAL:
     context.terminal = ['tmux','splitw','-h','-p','80']
