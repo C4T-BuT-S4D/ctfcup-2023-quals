@@ -13,6 +13,7 @@ try {
 } catch (e) {
   console.log(`Error reading ADMIN_TOKEN_FILE, will recreate it: ${e}`);
   ADMIN_TOKEN = crypto.randomBytes(32).toString("hex");
+  console.log(`Generated admin token: ${ADMIN_TOKEN}`);
   fs.writeFileSync(process.env["ADMIN_TOKEN_FILE"], ADMIN_TOKEN);
   console.log(`Wrote ADMIN_TOKEN_FILE, will restart bot`);
   process.exit(0);
