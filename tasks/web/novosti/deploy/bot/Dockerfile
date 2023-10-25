@@ -9,6 +9,7 @@ COPY package.json package-lock.json .
 RUN PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm ci
 
 COPY . .
+RUN mkdir /bot/admin-secret
 RUN chown -R node:node /bot
 
 USER node

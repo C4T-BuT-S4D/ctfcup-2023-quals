@@ -1,12 +1,22 @@
 import { createClient } from "redis";
 import puppeteer from "puppeteer";
 import fs from "fs";
+import crypto from "crypto";
 
 const REDIS_URL = process.env["REDIS_URL"];
 const TASK_URL = process.env["TASK_URL"];
-const ADMIN_TOKEN = fs
-  .readFileSync(process.env["ADMIN_TOKEN_FILE"], "utf-8")
-  .trim();
+
+let ADMIN_TOKEN;
+
+try {
+  ADMIN_TOKEN = fs.readFileSync(process.env["ADMIN_TOKEN_FILE"], "utf8").trim();
+} catch (e) {
+  console.log(`Error reading ADMIN_TOKEN_FILE, will recreate it: ${e}`);
+  ADMIN_TOKEN = crypto.randomBytes(32).toString("hex");
+  fs.writeFileSync(process.env["ADMIN_TOKEN_FILE"], ADMIN_TOKEN);
+  console.log(`Wrote ADMIN_TOKEN_FILE, will restart bot`);
+  process.exit(0);
+}
 
 let browser = null;
 

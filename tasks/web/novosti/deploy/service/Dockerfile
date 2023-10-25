@@ -2,8 +2,8 @@ FROM golang:1.21.3-alpine3.18 AS server-builder
 
 WORKDIR /build
 
-RUN echo "nobody:x:1337:1337:::" > etcpasswd
-RUN echo "nobody::1337:nobody" > etcgroup
+RUN echo "nobody:x:1000:1000:::" > etcpasswd
+RUN echo "nobody::1000:nobody" > etcgroup
 RUN mkdir dir
 
 COPY go.* .
@@ -38,6 +38,7 @@ COPY --from=server-builder --chown=nobody:nobody /service /service
 COPY --chown=nobody:nobody messages /service/src/novosti/messages
 COPY --from=front-builder --chown=nobody:nobody /build/public /service/src/novosti/public
 COPY --from=server-builder --chown=nobody:nobody --chmod=600 /build/dir /news
+COPY --from=server-builder --chown=nobody:nobody --chmod=600 /build/dir /service/admin-secret
 
 WORKDIR /service
 USER nobody

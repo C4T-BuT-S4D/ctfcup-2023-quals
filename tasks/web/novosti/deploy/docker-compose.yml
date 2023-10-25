@@ -8,17 +8,18 @@ services:
           memory: 512M
     volumes:
       - news-storage:/news
-    secrets:
-      - novosti-admin-token
+      - admin-secret:/service/admin-secret
     environment:
       STORAGE_DIR: /news
       REDIS_ADDR: "redis:6379"
-      ADMIN_TOKEN_FILE: /run/secrets/novosti-admin-token
+      ADMIN_TOKEN_FILE: /service/admin-secret/admin-token
     ports:
       - "80:9000"
     depends_on:
       redis:
         condition: service_healthy
+      bot:
+        condition: service_started
     restart: unless-stopped
   cleaner:
     image: c4tbuts4d/dedcleaner:latest
@@ -36,12 +37,12 @@ services:
         limits:
           cpus: "2"
           memory: 1G
-    secrets:
-      - novosti-admin-token
+    volumes:
+      - admin-secret:/bot/admin-secret
     environment:
-      TASK_URL: https://novosti-3d5d54b8c9f9f81aabcf60563021845f.ctfcup-2023.ru
+      TASK_URL: http://service:9000
       REDIS_URL: redis://redis:6379
-      ADMIN_TOKEN_FILE: /run/secrets/novosti-admin-token
+      ADMIN_TOKEN_FILE: /bot/admin-secret/admin-token
     depends_on:
       redis:
         condition: service_healthy
@@ -74,7 +75,6 @@ services:
 secrets:
   novosti-flag:
     environment: NOVOSTI_FLAG
-  novosti-admin-token:
-    environment: NOVOSTI_ADMIN_TOKEN
 volumes:
   news-storage:
+  admin-secret:
