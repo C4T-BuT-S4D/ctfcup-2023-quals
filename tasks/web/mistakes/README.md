@@ -55,12 +55,6 @@ Prototype pollution via window name, bypass regex
     }
     ```
 
-   Но для этого необходимо обойти regex, что можно сделать, предоставив IPv6 url:
-
-    ```
-    http://[::-1]:#.ctfcup-2023.ru
-    ```
-
 5. После этого находим chain для XSS в функции вставки элемента:
 
     ```javascript
@@ -108,12 +102,6 @@ Prototype pollution via window name, bypass regex
         console.log(inst)
         storage[inst] = instructionsJson[inst].toLowerCase();
     }
-    ```
-
-   To do this, it is necessary to bypass regex, which can be done by providing an IPv6 URL:
-
-    ```
-    http://[::-1]:#.ctfcup-2023.ru
     ```
 
 5. Then, find a chain for XSS in the element insertion function:
