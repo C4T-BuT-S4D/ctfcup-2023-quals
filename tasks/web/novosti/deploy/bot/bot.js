@@ -3,6 +3,7 @@ import puppeteer from "puppeteer";
 import fs from "fs";
 
 const REDIS_URL = process.env["REDIS_URL"];
+const TASK_URL = process.env["TASK_URL"];
 const ADMIN_TOKEN = fs
   .readFileSync(process.env["ADMIN_TOKEN_FILE"], "utf-8")
   .trim();
@@ -13,8 +14,8 @@ async function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function visit(blogID) {
-  console.log(`Visiting blog ${blogID}`);
+async function visit(storyID) {
+  console.log(`Visiting news story ${storyID}`);
 
   let context = null;
   try {
@@ -35,22 +36,11 @@ async function visit(blogID) {
 
     context = await browser.createIncognitoBrowserContext();
 
-    const page1 = await context.newPage();
-    await page1.goto(TASK_URL);
-    await page1.waitForSelector("input#name");
-    await page1.type("input#name", "An ordinary bot's blog");
-    await Promise.all([page1.click("button"), page1.waitForNavigation()]);
-    await page1.waitForSelector("input#title");
-    await page1.type("input#title", "The Flag");
-    await page1.type("textarea", FLAG);
-    await page1.click("button");
-    await sleep(2000);
-    await page1.close();
-
-    const page2 = await context.newPage();
-    await page2.goto(`${TASK_URL}/blog/${blogID}`);
-    await sleep(10000);
-    await page2.close();
+    const page = await context.newPage();
+    await page.setCookie({ name: "NOVOSTI_ADMIN_TOKEN", value: ADMIN_TOKEN });
+    await page.goto(`${TASK_URL}/news/${storyID}`);
+    await sleep(5000);
+    await page.close();
   } catch (e) {
     console.log(`Unexpected error: ${e}`);
   } finally {
@@ -65,9 +55,9 @@ async function main() {
     .on("error", (err) => console.log(`Failed to connect to redis: ${err}`))
     .connect();
 
-  console.log("Connected to redis, waiting on blogs channel");
+  console.log("Connected to redis, waiting on news channel");
 
-  await client.subscribe("blogs", visit);
+  await client.subscribe("news", visit);
 }
 
 process.on("SIGTERM", process.exit);

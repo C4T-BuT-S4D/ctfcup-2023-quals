@@ -6,7 +6,7 @@
     "watch": "postcss ./public/src/css/main.css -o ./public/dist/css/main.css --watch",
     "build": "postcss ./public/src/css/main.css -o ./public/dist/css/main.css --env=production"
   },
-  "devDependencies": {
+  "dependencies": {
     "autoprefixer": "^10.4.16",
     "cssnano": "^6.0.1",
     "postcss": "^8.4.31",

@@ -47,6 +47,12 @@ func (c News) Share() (result revel.Result) {
 
 	c.Log.Info("saved new story", "story_id", storyID)
 
+	if err := app.ReviewQueue.EnqueueReview(c.Request.Context(), string(storyID)); err != nil {
+		c.Log.Error("unexpected error while enqueuing story review", "error", err, "story_id", storyID)
+		c.ViewArgs["error"] = revel.Message(c.Request.Locale, "app.error.share")
+		return
+	}
+
 	c.ViewArgs["submitted"] = "t"
 	return
 }

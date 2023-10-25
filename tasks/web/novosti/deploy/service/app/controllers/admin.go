@@ -21,6 +21,7 @@ type Admin struct {
 func (c Admin) View(id string) (result revel.Result) {
 	cookie, err := c.Request.Cookie(revel.CookiePrefix + adminTokenCookie)
 	if err != nil || cookie.GetValue() != app.AdminToken {
+		c.Log.Warn("non-admin tried to access admin endpoint", "ip", c.Request.RemoteAddr)
 		return c.NotFound("No matching route found: " + c.Request.GetRequestURI())
 	}
 

@@ -1,4 +1,42 @@
 services:
+  service:
+    build: ./service
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 512M
+    volumes:
+      - news-storage:/news
+    secrets:
+      - novosti-admin-token
+    environment:
+      STORAGE_DIR: /news
+      REDIS_ADDR: "redis:6379"
+      ADMIN_TOKEN_FILE: /run/secrets/novosti-admin-token
+    ports:
+      - "80:9000"
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+  bot:
+    build: ./bot
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 1G
+    secrets:
+      - novosti-admin-token
+    environment:
+      TASK_URL: https://novosti-3d5d54b8c9f9f81aabcf60563021845f.ctfcup-2023.ru
+      REDIS_URL: redis://redis:6379
+      ADMIN_TOKEN_FILE: /run/secrets/novosti-admin-token
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
   files:
     build: ./files
     deploy:
@@ -9,24 +47,6 @@ services:
     secrets:
       - source: novosti-flag
         target: /static/flag
-    ports:
-      - "9888:8080"
-    restart: unless-stopped
-  bot:
-    build: ./bot
-    deploy:
-      resources:
-        limits:
-          cpus: "2"
-          memory: 1G
-    environment:
-      REDIS_URL: redis://redis:6379
-      ADMIN_TOKEN_FILE: /run/secrets/novosti-admin-token
-    secrets:
-      - novosti-admin-token
-    depends_on:
-      redis:
-        condition: service_healthy
     restart: unless-stopped
   redis:
     image: redis:7.2.2-alpine3.18
@@ -45,3 +65,5 @@ secrets:
     file: ./novosti-flag
   novosti-admin-token:
     file: ./novosti-admin-token
+volumes:
+  news-storage:

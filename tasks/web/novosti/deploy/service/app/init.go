@@ -2,8 +2,10 @@ package app
 
 import (
 	"novosti/app/filters"
+	"novosti/app/review"
 	"novosti/app/storage"
 	"os"
+	"strings"
 
 	"github.com/revel/revel"
 )
@@ -17,6 +19,7 @@ var (
 // Global state
 var (
 	NewsRepository *storage.NewsRepository
+	ReviewQueue    *review.Queue
 	AdminToken     string
 )
 
@@ -37,26 +40,41 @@ func init() {
 		revel.ActionInvoker,           // Invoke the action.
 	}
 
-	revel.OnAppStart(initDB)
+	revel.OnAppStart(initRepo)
+	revel.OnAppStart(initQueue)
 	revel.OnAppStart(initAdminToken)
 }
 
-func initDB() {
-	directory := os.Getenv("NOVOSTI_DIR_PATH")
+func initRepo() {
+	directory := os.Getenv("STORAGE_DIR")
 	if directory == "" {
-		panic("NOVOSTI_DIR_PATH env var is empty, news repository will fail")
+		panic("STORAGE_DIR env var is empty, news repository will fail")
 	}
 
 	NewsRepository = storage.NewNewsRepository(directory)
 }
 
-func initAdminToken() {
-	token := os.Getenv("NOVOSTI_ADMIN_TOKEN")
-	if token == "" {
-		panic("NOVOSTI_ADMIN_TOKEN env var is empty, admin will not be able to view shared news")
+func initQueue() {
+	redisAddr := os.Getenv("REDIS_ADDR")
+	if redisAddr == "" {
+		panic("REDIS_ADDR env var is empty, queueing story reviews will fail")
 	}
 
-	AdminToken = token
+	ReviewQueue = review.NewQueue(redisAddr, "news")
+}
+
+func initAdminToken() {
+	tokenFile := os.Getenv("ADMIN_TOKEN_FILE")
+	if tokenFile == "" {
+		panic("ADMIN_TOKEN_FILE env var is empty, admin will not be able to view shared news")
+	}
+
+	data, err := os.ReadFile(tokenFile)
+	if err != nil {
+		panic("unable to read ADMIN_TOKEN_FILE, admin will not be able to view shared news")
+	}
+
+	AdminToken = strings.TrimSpace(string(data))
 }
 
 var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {
