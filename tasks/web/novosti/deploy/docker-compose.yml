@@ -20,6 +20,15 @@ services:
       redis:
         condition: service_healthy
     restart: unless-stopped
+  cleaner:
+    image: c4tbuts4d/dedcleaner:latest
+    restart: unless-stopped
+    volumes:
+      - news-storage:/news
+    environment:
+      - DELETE_AFTER=30m
+      - SLEEP=5m
+      - DIRS=/news
   bot:
     build: ./bot
     deploy:
@@ -30,7 +39,7 @@ services:
     secrets:
       - novosti-admin-token
     environment:
-      TASK_URL: http://service:9000
+      TASK_URL: https://novosti-3d5d54b8c9f9f81aabcf60563021845f.ctfcup-2023.ru
       REDIS_URL: redis://redis:6379
       ADMIN_TOKEN_FILE: /run/secrets/novosti-admin-token
     depends_on:
