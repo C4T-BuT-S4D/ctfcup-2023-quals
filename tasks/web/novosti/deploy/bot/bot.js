@@ -37,7 +37,11 @@ async function visit(storyID) {
     context = await browser.createIncognitoBrowserContext();
 
     const page = await context.newPage();
-    await page.setCookie({ name: "NOVOSTI_ADMIN_TOKEN", value: ADMIN_TOKEN });
+    await page.setCookie({
+      name: "NOVOSTI_ADMIN_TOKEN",
+      value: ADMIN_TOKEN,
+      url: TASK_URL,
+    });
     await page.goto(`${TASK_URL}/news/${storyID}`);
     await sleep(5000);
     await page.close();

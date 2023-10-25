@@ -29,17 +29,21 @@ func (c Admin) View(id string) (result revel.Result) {
 	var content string
 
 	defer func() {
+		if result != nil {
+			return
+		}
+
 		c.ViewArgs["storyID"] = id
 		result = c.Render(title, content)
 	}()
 
 	story, err := app.NewsRepository.GetStory(storage.StoryID(id))
 	if errors.Is(err, storage.ErrNotFound) {
-		return c.Redirect(routes.News.Share())
+		return c.NotFound("No such story exists")
 	} else if err != nil {
 		c.Log.Error("unexpected error while getting story from repository", "error", err)
 		c.ViewArgs["error"] = revel.Message(c.Request.Locale, "app.error.view")
-		return
+		return c.Redirect(routes.News.Share())
 	}
 
 	title = story.Title
