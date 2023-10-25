@@ -73,8 +73,8 @@ services:
     restart: unless-stopped
 secrets:
   novosti-flag:
-    file: ./novosti-flag
+    environment: NOVOSTI_FLAG
   novosti-admin-token:
-    file: ./novosti-admin-token
+    environment: NOVOSTI_ADMIN_TOKEN
 volumes:
   news-storage:

@@ -11,14 +11,11 @@
 
 ## Deploy
 
-1. Create flag secret in deploy directory.
-2. Create admin token secret in deploy directory.
-3. Launch the compose project.
-
 ```sh
 cd deploy
-echo "ctfcup{flag}" > novosti-flag
-echo "random-token" > novosti-admin-token
+export NOVOSTI_FLAG="ctfcup{flag}"
+export NOVOSTI_ADMIN_TOKEN="$(python3 -c 'print(__import__("os").urandom(32).hex())')"
+echo $NOVOSTI_ADMIN_TOKEN > .novosti-admin-token # backup for restart
 docker compose -p web-novosti up --build -d
 ```
 
