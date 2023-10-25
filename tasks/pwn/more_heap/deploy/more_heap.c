@@ -103,7 +103,7 @@ int main() {
     init();
     char s[4] = {};
     while (1) {
-        write(1, "1. Add\n2. Delete\n3. Show\n4. Exit\n\n> ", 37);
+        write(1, "1. Add\n2. Delete\n3. Show\n4. Exit\n\n> ", 36);
         read(0, &s, 2);
         if (s[1] != '\0' && s[1] != '\n') {
             write(1, "Invalid choice\n", 15);
