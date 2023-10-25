@@ -7,7 +7,6 @@ pubtemp=$(mktemp -d)
 cp -R deploy $pubtemp/novosti
 cd $pubtemp
 
-rm -f novosti/novosti-flag novosti/novosti-admin-token
 zip -9 -r novosti.zip novosti
 
 cd $curdir
