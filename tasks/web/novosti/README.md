@@ -12,10 +12,11 @@
 ## Deploy
 
 ```sh
-cd deploy
 export NOVOSTI_FLAG="ctfcup{flag}"
 export NOVOSTI_ADMIN_TOKEN="$(python3 -c 'print(__import__("os").urandom(32).hex())')"
 echo $NOVOSTI_ADMIN_TOKEN > .novosti-admin-token # backup for restart
+
+cd deploy
 docker compose -p web-novosti up --build -d
 ```
 
