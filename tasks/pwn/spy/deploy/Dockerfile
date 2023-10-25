@@ -24,6 +24,4 @@ RUN touch /flag.txt && chmod o+w /flag.txt
 WORKDIR /
 USER nobody
 
-ENV FLAG=ctfcup{flag}
-
 CMD [ "/entrypoint.sh" ]
