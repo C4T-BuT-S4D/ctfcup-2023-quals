@@ -5,7 +5,7 @@ curdir="$PWD"
 pubtemp="$(mktemp -d)"
 
 mkdir "$pubtemp/time_capsule"
-cp dev/time_capsule "$pubtemp/time_capsule"
+cp dev/time_capsule "$pubtemp/time_capsule/"
 cp dev/flag.txt.enc "$pubtemp/time_capsule"
 
 cd "$pubtemp"
