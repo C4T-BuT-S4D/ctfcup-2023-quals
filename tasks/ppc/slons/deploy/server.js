@@ -15,7 +15,7 @@ app.use(session({
 app.use(express.static('public'));
 
 function generateTaskVariant(key) {
-    const text = `I placed ${Math.floor(Math.random() * 64) + 1} slons or no`;
+    const text = `I placed ${Math.floor(Math.random() * 2000) - 1000} slons or no`;
     const encrypted = key.encrypt(text, 'base64');
     return {
         n: key.exportKey('components-public')['n'].toString('hex'),
