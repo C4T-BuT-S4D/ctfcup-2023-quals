@@ -1,4 +1,4 @@
-# crp | time_capsule
+# rev | time_capsule
 
 ## Information
 
@@ -6,7 +6,7 @@
 
 ## Public
 
-Provide python script file: [public/time_capsule.zip](public/time_capsule.zip).
+Provide archive: [public/time_capsule.zip](public/time_capsule.zip).
 
 ## TLDR
 
