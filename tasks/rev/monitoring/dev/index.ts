@@ -31,7 +31,7 @@ Bun.serve({
     Bun.write(cmdPath, cmd, { mode: 400 });
 
     const command = Bun.spawn(
-      ["/usr/local/bin/deno", "run", `--allow-read=${entry}`, cmdPath],
+      ["/usr/bin/deno", "run", `--allow-read=./${entry}`, cmdPath],
       {
         stderr: "ignore",
         cwd: "entries",
