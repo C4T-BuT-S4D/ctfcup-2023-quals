@@ -1,0 +1,20 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8008:80"
+    depends_on:
+      - redis
+    restart: unless-stopped
+    mem_limit: 512m
+    cpus: 1
+    pids_limit: 128
+    env_file: app.env
+
+
+  redis:
+    image: redis:latest
+    restart: unless-stopped
+    mem_limit: 256m
+    cpus: 0.5
+    pids_limit: 128
