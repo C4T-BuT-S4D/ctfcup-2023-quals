@@ -10,7 +10,7 @@ Provide executable: [public/lock](public/lock).
 
 ## TLDR
 
-Polynomial reminders modulo flag that should equal simple equations of power 1, written in c++.
+Polynomial remainders modulo flag that should equal simple polynomials of degree 1, written in c++.
 
 ## Writeup (ru)
 
@@ -18,7 +18,7 @@ Polynomial reminders modulo flag that should equal simple equations of power 1, 
 
 ## Writeup (en)
 
-We are given an executable which checks for flag correctness in the following way: it trivially converts hex string to bytes to polynomial, then computes the remainder of 16 known polynomials modulo this polynomial and checks that the result is a polynomial of degree 1 with a matching root. Having reverse engineered the binary, we can simply take the known polynomials, subtract `x - root` and compute their greatest common divider. (`poly = (x - root) mod(flag_poly) <=> poly = (x - root) + some_poly * flag_poly`)
+We are given an executable which checks for flag correctness in the following way: it trivially converts hex string to bytes to polynomial, then computes the remainder of 16 known polynomials modulo this polynomial and checks that the result is a polynomial of degree 1 with a matching root. Having reverse engineered the binary, we can simply take the known polynomials, subtract `x - root` and compute their greatest common diviser. (`poly = (x - root) mod(flag_poly) <=> poly = (x - root) + some_poly * flag_poly`)
 
 [Exploit](solve/solve.py)
 
