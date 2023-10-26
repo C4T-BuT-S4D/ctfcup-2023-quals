@@ -2,6 +2,10 @@
 
 ## Information
 
+> Мой агент передал бумажку с каким-то цифрами и больше не выходил на связь. Надеюсь его не схватили Арбалеты, но что делать с бумажкой я так и не понял. Разберись, а о награде договоримся.
+>
+> My agent handed over a piece of paper with some numbers and never contacted me again. I hope the Arbalety didn’t grab him, but I still don’t understand what to do with the piece of paper. Figure it out, and we'll agree on a reward.
+> 
 > nc 0 13001
 
 ## Deploy
