@@ -2,7 +2,7 @@
 
 ## Information
 
-In group theory, the symmetry group of a geometric object is the group of all transformations under which the object is invariant, endowed with the group operation of composition.
+В одном из заброшенных зданий вы находите странную геометрическую фигуру, начертанную кровью на полу. Дневник на столе поясняет, что она используется для коммуникации.
 
 ## Public
 
