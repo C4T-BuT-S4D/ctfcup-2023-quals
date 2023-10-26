@@ -1,27 +1,12 @@
 services:
   app:
     build: .
+    image: "cr.yandex/crp56e8fvolm1rqugnkf/crp-murdata:latest"
     ports:
       - "8008:80"
-    depends_on:
-      - redis
     restart: unless-stopped
     mem_limit: 512m
     cpus: 1
     pids_limit: 128
-    env_file: app.env
-    volumes:
-      - "userdata:/userdata"
-
-  redis:
-    image: redis:latest
-    restart: unless-stopped
-    mem_limit: 256m
-    cpus: 0.5
-    pids_limit: 128
-    volumes:
-      - "redisdata:/data"
-
-volumes:
-  userdata:
-  redisdata:
+    environment:
+      - "FLAG=ctfcup{example}"

