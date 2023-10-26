@@ -2,6 +2,8 @@ version: "2.4"
 services:
   delirium:
     build: .
+    platform: linux/amd64
+    image: "cr.yandex/crp56e8fvolm1rqugnkf/ppc-delirium:latest"
     ports:
       - "2112:2112"
     restart: unless-stopped

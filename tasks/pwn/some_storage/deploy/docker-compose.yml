@@ -3,6 +3,8 @@ version: "2.4"
 services:
   pwn:
     build: .
+    platform: linux/amd64
+    image: "cr.yandex/crp56e8fvolm1rqugnkf/pwn-some-storage:latest"
     ports:
       - "13002:13002"
     restart: unless-stopped

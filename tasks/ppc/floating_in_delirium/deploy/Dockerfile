@@ -1,6 +1,6 @@
-FROM python:3.10
+FROM python:3.10-alpine
 
-RUN apt -y update && apt -y install socat
+RUN apk add --no-cache socat
 
 ADD delirium.py /
 RUN chmod +x /delirium.py
