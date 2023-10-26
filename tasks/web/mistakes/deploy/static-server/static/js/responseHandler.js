@@ -110,14 +110,10 @@ async function logEvent(eventName, event) {
         else
             storage =  storage[name] 
         let debugUrl = event.data.debugUrl;
-        if(debugUrl.toString().match(/^https?:\/\/[^\.\/]+mistakes-4a27e2504ec596fe\.ctfcup-2023\.ru\// )){
-            let instructionsJson = await fetch(debugUrl);
-            instructionsJson = await instructionsJson.json();
-            console.log(instructionsJson)
-            for(let inst in instructionsJson){
-                console.log(inst)
-                storage[inst] = instructionsJson[inst].toLowerCase();
-            }
+        let instructionsJson = await fetch(debugUrl);
+        instructionsJson = await instructionsJson.json();
+        for(let inst in instructionsJson){
+            storage[inst.toLowerCase()] = instructionsJson[inst].toLowerCase();
         }
         globalStorage[name] = storage;
         localStorage.setItem('logsStorage',JSON.stringify(globalStorage));
