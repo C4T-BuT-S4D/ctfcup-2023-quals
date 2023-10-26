@@ -1,17 +1,14 @@
 const express = require('express');
-const session = require('express-session');
 const NodeRSA = require('node-rsa');
-const cookieParser = require('cookie-parser');
 const app = express();
+const cookieSession = require('cookie-session')
 
-app.use(cookieParser()); 
 
-app.use(session({
-    secret: process.env.KEY,
-    resave: false,
-    saveUninitialized: true
-}));
-
+app.use(cookieSession({
+    name: 'session',
+    keys: [process.env.KEY],
+    maxAge: 24 * 60 * 60 * 1000 
+  }))
 app.use(express.static('public'));
 
 function generateTaskVariant(key) {
@@ -49,7 +46,7 @@ app.post('/check-task', (req, res) => {
     if (result) {
         req.session.correctAnswers = (req.session.correctAnswers || 0) + 1;
 
-        if (req.session.correctAnswers === 100) {
+        if (req.session.correctAnswers === 1337) {
                 return res.json({ flag: process.env.FLAG });
         }
     }

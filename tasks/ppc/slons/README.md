@@ -2,7 +2,7 @@
 
 ## Information
 
-> Your task is to unveil the RSA secret and discover the number of elephants hidden within the heart of the Chess of Power. The hope of the great kingdom of Elephanta rests on you!
+> Арбалеты Сибири создали лотерею, где зарабатывают огомные деньги. Можно ли ее взломать ?
 > 
 > `http://slons-afb69872b377a978.ctfcup-2023.ru`
 
@@ -23,13 +23,13 @@ Just bruteforce)
 
 ## Writeup (ru)
 
-В задаче количестов слонов на доске может быть от 0 до 65, а ошибки нее учитываются, то есть достаточно просто перебрать.
+Декодируем сессию, и декодируем сообщение, после чего отправляем число.
+
 ## Writeup (en)
 
-The task allows for the number of elephants on the board to range from 0 to 65, and errors are taken into account, so it's sufficient to simply iterate through them.
+Decode the session, decode the message, then send the number
 
-
-[Exploit](solve/solve.py)
+[Exploit](solve/solve.js)
 
 ## Domain
 
