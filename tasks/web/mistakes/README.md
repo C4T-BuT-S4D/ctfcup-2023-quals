@@ -2,7 +2,7 @@
 
 ## Information
 
-> JavaScript teaches us to embrace mistakes and turn them into opportunities
+> В 2196 году люди все еще пользуются JavaScript’ом. Но правильно ли ? Посмотри на этот корпоративный портал...
 > 
 > `static-mistakes-4a27e2504ec596fe.ctfcup-2023.ru`
 
