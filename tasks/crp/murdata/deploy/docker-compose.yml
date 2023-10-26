@@ -10,7 +10,8 @@ services:
     cpus: 1
     pids_limit: 128
     env_file: app.env
-
+    volumes:
+      - "userdata:/userdata"
 
   redis:
     image: redis:latest
@@ -18,3 +19,9 @@ services:
     mem_limit: 256m
     cpus: 0.5
     pids_limit: 128
+    volumes:
+      - "redisdata:/data"
+
+volumes:
+  userdata:
+  redisdata:

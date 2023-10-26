@@ -1,34 +1,38 @@
 <?php
 
 require_once "DB.php";
-require_once "session.php";
+require_once "2fa.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['username']) || !isset($_POST['password']) || !isset($_POST['passport'])) {
-        die("Missing username, password or passport");
+    $username = $_POST['username'] ?? "";
+    $password = $_POST["password"] ?? "";
+    $passport = $_POST["passport"] ?? "";
+
+    if ($username == "" || $password == "" || $passport == "") {
+        die("Missing username, password or passport.");
+    }
+    if (preg_match('/^[a-zA-Z0-9_]+$/m', $username) !== 1) {
+        die("Invalid username.");
     }
 
-    $username = $_POST['username'];
-    $password = $_POST["password"];
-    $passport = $_POST["passport"];
-
     $db = new DB();
-
     if ($db->userExists($username)) {
         die("User already exists");
     }
 
-    $userId = $db->addUser($username, $password, $passport);
+    $db->addUser($username, $password, $passport);
 
-    start_session($userId, $username);
-    header("Location: /");
+    $token = generate_token($username);
+
+    echo "<h1>Your token is: <b>'${token}'</b></h1><br>";
+    echo "<h3>Save it somewhere safe, you will need it to login.</h3><br>";
     return;
 }
 
 ?>
 <html>
 <head>
-    <title>MurSecrets - Register</title>
+    <title>MurData - Register</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -47,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             Your passport id:
             <input type="text" name="passport" placeholder="1111 2222">
         </label>
-        <input type="submit" value="Login">
+        <input type="submit" value="Register">
     </form>
 
     <p>Already have an account? <a href="/login.php">Login</a></p>

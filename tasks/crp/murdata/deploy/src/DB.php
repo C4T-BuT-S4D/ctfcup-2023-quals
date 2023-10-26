@@ -3,6 +3,7 @@
 class DB
 {
     private $redis;
+    private $dataDir;
     public function __construct()
     {
         $this->redis = new Redis([
@@ -15,14 +16,11 @@ class DB
                 'cap' => 750,
             ],
         ]);
+        $this->dataDir = getenv("DATA_DIR") ?: "/tmp/";
     }
 
     public function userExists($username) {
         return $this->redis->hExists("users", $username);
-    }
-
-    public function getUserId($username) {
-        return $this->redis->hGet("user_ids", $username);
     }
 
     private function hashPassword($password) {
@@ -30,31 +28,39 @@ class DB
     }
 
     private function compareHashes($hash1, $hash2) {
+        error_log("Comparing hashes: " . $hash1 . " " . $hash2);
+        error_log("Comparing hashes: " . hexdec($hash1) . " " . hexdec($hash2));
         return hexdec($hash1) === hexdec($hash2);
     }
 
     public function addUser($username, $password, $passport) {
-        $userId = $this->redis->incr("user_id");
         $this->redis->hSet("users", $username, $this->hashPassword($password));
-        $this->redis->hSet("user_ids", $username, $userId);
-        $this->redis->hSet("user_passports", $userId, $passport);
-        return $userId;
+        file_put_contents($this->normalizePath($this->dataDir . $username . ".txt"), $passport);
     }
 
-    public function getPassport($userId) {
-        return $this->redis->hGet("user_passports", $userId);
+    public function getPassport($username) {
+        return file_get_contents($this->normalizePath($this->dataDir . $username . ".txt"));
     }
 
     public function isValidPassword($username, $password) {
         return $this->compareHashes($this->redis->hGet("users", $username), $this->hashPassword($password));
     }
 
-    public function getInfo($userId) {
-        return $this->redis->hGet('infos', $userId);
-    }
+    private function normalizePath(string $path)
+    {
+        return array_reduce(explode('/', $path), function($a, $b) {
+            if ($a === null) {
+                $a = "/";
+            }
+            if ($b === "" || $b === ".") {
+                return $a;
+            }
+            if ($b === "..") {
+                return dirname($a);
+            }
 
-    public function setInfo($userId, $info) {
-        return $this->redis->hSet('infos', $userId, $info);
+            return preg_replace("/\/+/", "/", "$a/$b");
+        });
     }
 
 }
