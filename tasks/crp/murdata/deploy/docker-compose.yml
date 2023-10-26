@@ -1,6 +1,7 @@
 services:
   app:
     build: .
+    platform: linux/amd64
     image: "cr.yandex/crp56e8fvolm1rqugnkf/crp-murdata:latest"
     ports:
       - "8008:80"

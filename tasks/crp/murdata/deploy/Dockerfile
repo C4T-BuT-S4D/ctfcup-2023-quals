@@ -5,7 +5,7 @@ RUN apt-get update && \
 RUN pecl install redis \
 && docker-php-ext-enable redis
 
-RUN wget -o /wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh \
+RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -O /wait-for-it.sh \
   && chmod +x /wait-for-it.sh
 COPY entry.sh /entry.sh
 COPY src/ /var/www/html/
