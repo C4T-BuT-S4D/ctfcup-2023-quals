@@ -1,6 +1,8 @@
 services:
   monitoring:
+    platform: linux/amd64
     build: .
+    image: "cr.yandex/crp56e8fvolm1rqugnkf/rev-monitoring:latest"
     init: true
     deploy:
       resources:
