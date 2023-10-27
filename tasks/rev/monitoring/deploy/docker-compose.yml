@@ -1,0 +1,14 @@
+services:
+  monitoring:
+    build: .
+    init: true
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: "512M"
+    ports:
+      - 1984:1984
+    environment:
+      FLAG: ctfcup{example}
+    restart: unless-stopped
