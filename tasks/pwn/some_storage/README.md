@@ -2,6 +2,10 @@
 
 ## Information
 
+> Мы перехватили трафик из штаба "Арбалетов", и все, что удалось выявить — только этот адрес. Проверь, может, найдешь там что-то интересное.
+>
+> We intercepted traffic from the headquarters of "Arbalety", and all we were able to identify was this address. Check it out, maybe you'll find something interesting there.
+> 
 > nc 0 13002
 
 ## Deploy

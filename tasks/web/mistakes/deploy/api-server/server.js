@@ -17,6 +17,7 @@ const limiter = rateLimit({
 
 
 const app = express();
+app.enable('trust proxy');
 app.use(bodyParser.json());
 
 const { MONGO_USERNAME, MONGO_PASSWORD, MONGO_DB, SECRET_KEY } = process.env;
