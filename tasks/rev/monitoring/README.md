@@ -4,13 +4,17 @@
 
 Нам удалось вчёрную получить на руки некоторые из сервисов, встроенных в различные компоненты Megalith, но, к сожалению, только в бинарном виде. В частности, нам достался какой-то из серверов системы мониторинга за населением Metra Veehkim, может получиться как-нибудь разобраться с ним и выяснить, какие данные о нас собирают Арбалеты?
 
+We've managed to (not entirely legally) get our hands on some of the services embedded into the differents components of Megalith, but, sadly, only as binaries. Specifically, we've got one of the servers of the Metra Veehkim citizen monitoring system, do you think it could perhaps somehow help us figure out what kind of data the Arbalests are collecting about us?
+
 [https://monitoring-e2fc67113f9ed6f1d2bd6eae0c98f124.ctfcup-2023.ru](https://monitoring-e2fc67113f9ed6f1d2bd6eae0c98f124.ctfcup-2023.ru)
 
 ## Deploy
 
+Need whale deployment.
+
 ```sh
 cd deploy
-MONITORING_FLAG="ctfcup{flag}" docker compose -p rev-monitoring up --build -d
+docker compose -p rev-monitoring up --build -d
 ```
 
 ## Public
