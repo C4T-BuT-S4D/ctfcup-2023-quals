@@ -3781,6 +3781,6 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    std::cout << "yep" << std::endl;
+    std::cout << "ctfcup{" << flag_string << "}" << std::endl;
     return 0;
 }

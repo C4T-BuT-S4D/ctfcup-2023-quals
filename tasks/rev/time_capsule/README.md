@@ -2,7 +2,9 @@
 
 ## Information
 
-Один из артефактов былой золотой эпохи Metra Veehkim - временная капсула. Однака записка в этой временной капсуле говорит, что настоящей временной капсулой является этот файл.
+Один из артефактов былой золотой эпохи Metra Veehkim - временная капсула. Однако записка в этой временной капсуле говорит, что настоящей временной капсулой является этот файл.
+
+An artifact of Metra Veehkim once prosperous golden age - a time capsule. However a note inside indicates that the real time_capsule is this file.
 
 ## Public
 
