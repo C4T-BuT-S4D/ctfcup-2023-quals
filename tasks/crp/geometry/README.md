@@ -4,6 +4,8 @@
 
 В одном из заброшенных зданий вы находите странную геометрическую фигуру, начертанную кровью на полу. Дневник на столе поясняет, что она используется для коммуникации.
 
+In one the many abandoned buildings of Metra Veehkim a strange geometric shape is drown in blood on the floor. A note nearby explains that it is used for communication.
+
 ## Public
 
 Provide zip file and traffic dump: [public/geometry.zip](public/geometry.zip) [public/geometry.pcapng](public/geometry.pcapng).

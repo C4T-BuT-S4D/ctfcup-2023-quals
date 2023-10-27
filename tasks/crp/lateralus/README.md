@@ -2,14 +2,9 @@
 
 ## Information
 
-Black
-Then
-White are
-All I see
-In my infancy
-Red and yellow then came to be
-Reaching out to me
-Lets me see
+С нами вошел в контакт один из ученых "Арбалетов Сибири", он утверждает, что не согласен с методами и корпорации, желает вам помочь и направляет вам секретный проэкт. Однако открыв его, единственное что вы обнаруживаете какие то бессмысленные заметки про числа Фибоначи и этот файл.
+
+You were contacted by one of the scientists of "Arbalest of Siberia", he says he does not agree with the methods of the corporation, wants to help and forwards you some secret project. However having opened it, all you find is some incomprehensible ramblings about Fibonachi numbers and this file.
 
 ## Public
 

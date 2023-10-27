@@ -2,7 +2,9 @@
 
 ## Information
 
-Летая в орбите над Metra Veehkim, вы находите себя в странном месте, средь чисел и арифметических операций.
+Летая на орбите над Metra Veehkim, вы находите себя в странном месте, средь чисел и арифметических операций.
+
+Floating in orbit above Metra Veehkim, you find yourself in a strange place amongst numbers and arithmetic operations.
 
 ## Deploy
 

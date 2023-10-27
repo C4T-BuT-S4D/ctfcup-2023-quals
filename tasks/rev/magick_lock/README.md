@@ -2,7 +2,9 @@
 
 ## Information
 
-В одной из лабороторий "арбалетов сибири" вы находите магическую дверь, она просит у вас некую hex строчку. Говорят достаточно развитые технологии неотличимы от магии, верно?
+В одной из лабороторий "Арбалетов Сибири" вы находите магическую дверь, она просит у вас некую hex строчку. Говорят, достаточно развитые технологии неотличимы от магии, верно?
+
+You find a magick door in one "Arbalest of Siberia" laboratories, which asks for some hex string. They say: any technology sufficiently advenced is indistinguishable from magick, right?
 
 ## Public
 
