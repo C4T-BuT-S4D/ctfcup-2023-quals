@@ -1,19 +1,14 @@
 services:
   monitoring:
     build: .
+    init: true
     deploy:
       resources:
         limits:
           cpus: "2"
           memory: "512M"
-    volumes:
-      - ./entries:/entries:ro
-    secrets:
-      - source: monitoring-flag
-        target: /flag.txt
     ports:
       - 1984:1984
+    environment:
+      FLAG: ctfcup{example}
     restart: unless-stopped
-secrets:
-  monitoring-flag:
-    environment: MONITORING_FLAG
