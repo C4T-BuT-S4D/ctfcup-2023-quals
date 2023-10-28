@@ -1,20 +1,27 @@
 #!/usr/bin/env python3
 
+import io
+import json
 import math
-import tempfile
 import os
 import sys
-import json
+import tempfile
+import time
 import uuid
-import subprocess
+import warnings
+from base64 import b64decode
 from dataclasses import dataclass
+from urllib.parse import urljoin, urlparse
 
 import librosa
 import numpy as np
 import pydub
+import requests
 import soundfile
 from pydub.playback import play
 from pydub.utils import make_chunks
+
+warnings.simplefilter("ignore", UserWarning)
 
 
 @dataclass
@@ -48,7 +55,9 @@ def split_recording(
 
 def calc_feature(data, sr) -> np.ndarray:
     # return librosa.feature.mfcc(y=data, sr=sr, n_mfcc=64, hop_length=128, n_fft=512)
-    return librosa.feature.chroma_cens(y=data, sr=sr, n_chroma=40, bins_per_octave=80)
+    return librosa.feature.chroma_cens(
+        y=data, sr=sr, n_chroma=40, bins_per_octave=80, hop_length=256
+    )
 
 
 def prepare_sample(
@@ -63,19 +72,24 @@ def prepare_sample(
 
 
 def load_samples() -> list[Sample]:
-    if not os.path.exists("samples"):
-        return []
+    os.makedirs("samples", exist_ok=True)
+    os.makedirs("features", exist_ok=True)
 
-    handled = set()
     samples = []
-    for file in os.listdir("samples"):
-        id = file.split(".")[0]
-        if id in handled:
-            continue
+    ids = sorted(set(f.split(".")[0] for f in os.listdir("samples")))
+    for i, id in enumerate(ids):
+        print(f"[{i+1}/{len(ids)}] Loading sample {id}")
 
         audio = pydub.AudioSegment.from_wav(f"samples/{id}.wav")
         data, sr = librosa.load(f"samples/{id}.wav")
-        feature = calc_feature(data, sr)
+
+        try:
+            feature = np.load(f"features/{id}.npy")
+        except:
+            feature = calc_feature(data, sr)
+            print(f"Caching features for {id}")
+            np.save(f"features/{id}.npy", feature)
+
         with open(f"samples/{id}.json") as f:
             data = json.load(f)
 
@@ -86,12 +100,40 @@ def load_samples() -> list[Sample]:
     return samples
 
 
-def next_recording() -> list[tuple[pydub.AudioSegment, np.ndarray]]:
-    subprocess.check_call(["./env/bin/python3", "generate.py"])
-    recording = pydub.AudioSegment.from_mp3("out.mp3")
+def log_session(s: requests.Session):
+    print(f"Session cookies: {s.cookies}")
+
+    cookie = s.cookies.get("session")
+    if cookie is None:
+        print(f"No session cookie")
+        return
+
+    value = b64decode(cookie.split(".")[0] + "==").decode()
+    print(f"Session cookie {cookie} value: {value}")
+
+
+def next_recording(
+    s: requests.Session, task_url: str
+) -> list[tuple[pydub.AudioSegment, np.ndarray]]:
+    r = s.post(urljoin(task_url, "/captcha/generate"))
+    print(f"Generated new captcha")
+    log_session(s)
+    recording = pydub.AudioSegment.from_mp3(io.BytesIO(r.content))
+    recording.export("recording.mp3", format="mp3")
     chunks = split_recording(recording)
     chunks = [prepare_sample(chunk) for chunk in chunks]
     return chunks
+
+
+def submit_result(s: requests.Session, task_url: str, text: str) -> tuple[str, bool]:
+    r = s.post(urljoin(task_url, "/captcha/submit"), data={"text": text})
+    print(f"Submit results: {r.status_code}:{r.text}")
+    if r.status_code != 200:
+        print(f"Submit with {text} failed, got status {r.status_code}")
+        return "", False
+    print(f"Submit with {text} succeeded, saving cookie")
+    log_session(s)
+    return s.cookies["session"], True
 
 
 def find_closest_sample(
@@ -114,10 +156,13 @@ def find_closest_sample(
 
 def save_sample(sample: Sample):
     os.makedirs("samples", exist_ok=True)
+    os.makedirs("features", exist_ok=True)
 
     sample.audio.export(f"samples/{sample.id}.wav", format="wav")
     with open(f"samples/{sample.id}.json", "w") as f:
         json.dump({"letter": sample.letter}, f)
+
+    np.save(f"features/{sample.id}.npy", sample.feature)
 
     print(f"Saved new sample {sample.id}")
 
@@ -131,10 +176,17 @@ def main() -> int:
         )
         return 1
 
+    task_url = sys.argv[2]
+    s = requests.session()
+    backup = None
+
     samples = load_samples()
 
     while True:
-        recording_samples = next_recording()
+        start = time.time()
+
+        recording_samples = next_recording(s, task_url)
+        guess = ""
         for recording_sample in recording_samples:
             if len(samples) == 0:
                 print(
@@ -167,9 +219,9 @@ def main() -> int:
 
                     correct = input("Is this really the same sample? ")
                     if correct == "y":
-                        continue
-
-                    letter = input("What is its actual letter? ")
+                        letter = closest_sample.letter
+                    else:
+                        letter = input("What is its actual letter? ")
 
                     new_sample = Sample(
                         id=uuid.uuid4(),
@@ -180,6 +232,19 @@ def main() -> int:
 
                     save_sample(new_sample)
                     samples.append(new_sample)
+                else:
+                    guess += closest_sample.letter
+
+        print(f"Took {time.time() - start}s")
+
+        new_backup, ok = submit_result(s, task_url, guess)
+        if not ok:
+            if backup is not None:
+                print(f"Restoring to backup {backup}")
+                s.cookies.set("session", backup, domain=urlparse(task_url).hostname)
+                log_session(s)
+        else:
+            backup = new_backup
 
     return 0
 
