@@ -1,0 +1,9 @@
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    platform: linux/amd64
+    ports:
+      - "8080:8080"
+    environment:
+      - FLAG=ctfcup{example}
