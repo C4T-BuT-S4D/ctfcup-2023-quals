@@ -7,8 +7,8 @@ import uuid
 import io
 
 CAPTCHA_LENGTH = 10
-CAPTCHA_LIFETIME = timedelta(seconds=100)
-CAPTCHAS_REQUIRED = 2
+CAPTCHA_LIFETIME = timedelta(seconds=5)
+CAPTCHAS_REQUIRED = 100
 
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
