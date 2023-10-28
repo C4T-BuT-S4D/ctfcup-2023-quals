@@ -40,7 +40,7 @@ services:
     volumes:
       - admin-secret:/bot/admin-secret
     environment:
-      TASK_URL: https://novosti-3d5d54b8c9f9f81aabcf60563021845f.ctfcup-2023.ru
+      TASK_URL: http://service:9000
       REDIS_URL: redis://redis:6379
       ADMIN_TOKEN_FILE: /bot/admin-secret/admin-token
     depends_on:
