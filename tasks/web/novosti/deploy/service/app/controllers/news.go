@@ -5,6 +5,7 @@ import (
 	"novosti/app"
 	"novosti/app/storage"
 
+	"github.com/dpapathanasiou/go-recaptcha"
 	"github.com/revel/revel"
 )
 
@@ -17,6 +18,7 @@ type News struct {
 func (c News) Share() (result revel.Result) {
 	title := c.Params.Form.Get("title")
 	content := c.Params.Form.Get("content")
+	recaptchaResponse := c.Params.Form.Get("g-recaptcha-response")
 
 	defer func() {
 		result = c.Render(title, content)
@@ -32,6 +34,14 @@ func (c News) Share() (result revel.Result) {
 	c.Validation.MaxSize(content, 1000)
 
 	if c.Validation.HasErrors() {
+		return
+	}
+
+	if recaptchaResponse == "" {
+		c.ViewArgs["error"] = revel.Message(c.Request.Locale, "app.error.captcha")
+		return
+	} else if ok, err := recaptcha.Confirm(c.Request.Header.Get("CF-Connecting-IP"), recaptchaResponse); !ok || err != nil {
+		c.ViewArgs["error"] = revel.Message(c.Request.Locale, "app.error.captcha")
 		return
 	}
 

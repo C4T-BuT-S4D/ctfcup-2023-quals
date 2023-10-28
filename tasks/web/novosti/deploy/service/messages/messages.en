@@ -1,5 +1,6 @@
 app.title = News
 app.error.share = There was an error processing your story! Please message the service administrators.
+app.error.captcha = Please complete the reCAPTCHA before sending a story to review.
 page.Share.title = Share
 page.Share.content.welcome = We would love for you to share your news-worthy stories with us!
 page.Share.content.title = Title
