@@ -52,7 +52,7 @@ TODO
 
 ## Domain
 
-https://monitoring-e2fc67113f9ed6f1d2bd6eae0c98f124.ctfcup-2023.ru
+No
 
 ## Cloudflare
 
