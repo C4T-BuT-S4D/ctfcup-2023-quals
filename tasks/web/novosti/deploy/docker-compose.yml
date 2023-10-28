@@ -14,7 +14,7 @@ services:
       REDIS_ADDR: "redis:6379"
       ADMIN_TOKEN_FILE: /service/admin-secret/admin-token
     ports:
-      - "80:9000"
+      - "8081:9000"
     depends_on:
       redis:
         condition: service_healthy
