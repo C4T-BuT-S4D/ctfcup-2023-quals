@@ -2,6 +2,7 @@ package ru.ctfcup.twofac
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.util.Log
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -76,7 +77,7 @@ class Totp @Inject constructor(
         // 0..20000 fib_16
 //        Log.d("RecoveryCode", "appsig " + appSignature.toHex())
 
-        val salt = interleaveStrings(secret.username, secret.domain, secret.secret)
+        val salt = interleaveStrings(secret.username, secret.domain)
 
         var nonceN = TOTP_RECOVERY_RANGE.first {
              nonce == MessageDigest.getInstance("SHA-256")
