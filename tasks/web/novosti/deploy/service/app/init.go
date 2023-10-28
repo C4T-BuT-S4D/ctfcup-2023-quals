@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/dpapathanasiou/go-recaptcha"
 	"github.com/revel/revel"
 )
 
@@ -43,6 +44,7 @@ func init() {
 	revel.OnAppStart(initRepo)
 	revel.OnAppStart(initQueue)
 	revel.OnAppStart(initAdminToken)
+	revel.OnAppStart(initRecaptcha)
 }
 
 func initRepo() {
@@ -75,6 +77,15 @@ func initAdminToken() {
 	}
 
 	AdminToken = strings.TrimSpace(string(data))
+}
+
+func initRecaptcha() {
+	recaptchaPrivateKey := os.Getenv("RECAPTCHA_PRIVATE_KEY")
+	if recaptchaPrivateKey == "" {
+		panic("RECAPTCHA_PRIVATE_KEY env var is empty, sharing will fail")
+	}
+
+	recaptcha.Init(recaptchaPrivateKey)
 }
 
 var HeaderFilter = func(c *revel.Controller, fc []revel.Filter) {
