@@ -4,8 +4,9 @@
 
 ## Information
 
-Мы думаем над тем, чтобы запустить свою собственную газету и новостной сайт, но не хотим связываться с новостными агенствами,
-поэтому мы решили получать новости из первоисточника - очевидцей самих новостей!
+Даже в такие тяжёлые времена как сейчас людям нужна информация. Мы решили запустить свой новостной сайт, но только так, чтобы об этом не узнали сам-знаешь-кто. Надеемся, очевидцы будут присылать нам новости, чтобы было, что публиковать. Не самим же искать анонсы, в самом-то деле...
+
+Even in times as difficult as now people need information. We decided to launch our own news website, but would like to keep it secret from you-know-who. Hopefully, the witnesses themselves will send us news we could publish, since we aren't going to be searching for them ourselves now, are we... 
 
 [https://novosti-3d5d54b8c9f9f81aabcf60563021845f.ctfcup-2023.ru](https://novosti-3d5d54b8c9f9f81aabcf60563021845f.ctfcup-2023.ru)
 
