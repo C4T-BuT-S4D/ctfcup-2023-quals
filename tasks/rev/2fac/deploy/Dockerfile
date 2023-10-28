@@ -1,7 +1,11 @@
-FROM openjdk:17-slim-bullseye
+FROM openjdk:17-slim-bullseye AS builder
 
 WORKDIR /app/
 COPY twofac-demo/ .
 RUN  ./gradlew --no-daemon build
 
-ENTRYPOINT ["java", "-jar", "build/libs/twofac-demo-all.jar"]
+FROM openjdk:17-slim-bullseye
+
+COPY --from=builder /app/build/libs/twofac-demo-all.jar /app.jar
+
+ENTRYPOINT ["java", "-jar", "/app.jar"]

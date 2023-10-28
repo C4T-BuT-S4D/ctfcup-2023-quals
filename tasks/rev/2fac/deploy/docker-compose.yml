@@ -1,6 +1,8 @@
 services:
   app:
     build: .
+    image: "cr.yandex/crp56e8fvolm1rqugnkf/rev-2fac:latest"
+
     restart: unless-stopped
     platform: linux/amd64
     ports:
