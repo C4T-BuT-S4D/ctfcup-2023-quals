@@ -22,13 +22,13 @@ def encode_session_cookie(pld, hsh):
 
     return urllib.parse.quote(pld) + "." + urllib.parse.quote(hsh)
 
+
 BASE_URL = sys.argv[1]
 
 s = requests.Session()
-username = 'someuser' + str(random.randint(0, 10000))
-print(username)
+username = 'someuser' + str(random.randint(0, 100000))
 r = s.post(f'{BASE_URL}/register.php',
-           data={'username': username, 'password': 'someuser', 'passport': '1234'})
+                  data={'username': username, 'password': username, 'passport': '1234'}, allow_redirects=False)
 if r.status_code != 200:
     print(r.text)
     exit(1)
