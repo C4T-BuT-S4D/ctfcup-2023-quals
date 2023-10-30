@@ -26,11 +26,11 @@ A [script](solve/show_board.py) was used to generate the image below:
 
 ## Writeup (ru)
 
-В задании нужно было восстановить доску Сапёра, которая хранится в формате XML в файле `Minesweeper.MineSweeperSave-ms`. Посмотреть на доску внимательно, заметить, что флажками выложен формат флага (остроумно, не правда ли?). Еще видно, как в три линии выложены флажки. Если спарсить доску, оказывается, что флажками отмечены пустые клетки. В описании указан формат флага - 20 цифр. Флажков в линию ровно 20. Проникнувшись сутью игры в сапёра, можно сделать вывод, что от нас хотят 20 цифр, которые должны быть на месте этих флажков.
+В задании нужно было восстановить доску Сапёра, которая хранится в формате XML в [файле](solve/file.0x145a059e0.0xfa8005205520.DataSectionObject.Minesweeper.MineSweeperSave-ms.dat) `Minesweeper.MineSweeperSave-ms`. Посмотреть на доску внимательно, заметить, что флажками выложен формат флага (остроумно, не правда ли?). Еще видно, как в три линии выложены флажки. Если спарсить доску, оказывается, что флажками отмечены пустые клетки. В описании указан формат флага - 20 цифр. Флажков в линию ровно 20. Проникнувшись сутью игры в сапёра, можно сделать вывод, что от нас хотят 20 цифр, которые должны быть на месте этих флажков.
 
 ## Writeup (en)
 
-Recover Minesweeper game save, which uses XML format (in a file named `Minesweeper.MineSweeperSave-ms`). Get a feel of the board. Notice that there's flag format spelled out in flagged cells (lmao). And notice that there are flags arranged in three-ish lines, none of which are on the mines. For each such flag, write down the digit that would appear under the flag (i. e. the count of mines in a 3x3 area around given square). We get exactly 20 digits - as the flag format in the description suggests.
+Recover Minesweeper game save, which uses XML format (in a [file](solve/file.0x145a059e0.0xfa8005205520.DataSectionObject.Minesweeper.MineSweeperSave-ms.dat) named `Minesweeper.MineSweeperSave-ms`). Get a feel of the board. Notice that there's flag format spelled out in flagged cells (lmao). And notice that there are flags arranged in three-ish lines, none of which are on the mines. For each such flag, write down the digit that would appear under the flag (i. e. the count of mines in a 3x3 area around given square). We get exactly 20 digits - as the flag format in the description suggests.
 
 ## Flag
 `ctfcup{66655654558324554346}`
