@@ -6,7 +6,7 @@
 
 ## Public
 
-Provide zip file: zion.zip (no link because of size).
+Provide zip file: [zion.zip](./zion.zip).
 
 ## TLDR
 

@@ -6,7 +6,7 @@
 
 ## Public
 
-Provide zip file: zion-revenge.zip (no link because of size).
+Provide zip file: [zion-revenge.zip](./zion_revenge.zip).
 
 ## TLDR
 
