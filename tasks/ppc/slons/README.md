@@ -45,6 +45,8 @@ Just bruteforce)
 
 Возвращаемся и видим, что в логах после правильного ответа под номером [1337](https://en.wikipedia.org/wiki/Leet) нам прилетел флаг. Сдерживаемся чтобы не убить автора и сдаем флаг.
 
+Так же можно было заметить, что в этом таске числа не очень большие, порядка тысячи. И можно не расшифровывать сообщения приватным ключом, а первый раз факторизовать `n` - 512 бит факторизовать долго, но возможно, хоть и [дорого](https://crypto.stackexchange.com/questions/55728/factoring-a-512-bit-number), заметить этот факт, и расшифровывать сообщения [перебором по сообщению](https://crypto.stackexchange.com/questions/58147/attack-rsa-knowing-the-public-key-and-brute-forcing-all-possible-message)
+
 ## Writeup (en)
 
 Decode the session, decode the message, then send the number
