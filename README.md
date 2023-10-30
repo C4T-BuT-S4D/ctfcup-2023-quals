@@ -11,6 +11,10 @@
 
 # Результаты
 
+![Top](scoreboard/top.png)
+
+[Весь скорборд](scoreboard/full.png)
+
 # Информация
 - Руководитель проекта: [@deviantwish](https://github.com/deviantwish)
 - Технический директор: Максим Смирнов
