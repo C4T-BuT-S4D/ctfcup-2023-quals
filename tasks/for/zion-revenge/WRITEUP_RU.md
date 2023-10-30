@@ -108,7 +108,7 @@ func (hc *halfConn) setTrafficSecret(suite *cipherSuiteTLS13, level QUICEncrypti
 
 ## Достаем trafficSecret из дампа памяти
 
-Проще всего открыть дамп памяти в [delve](https://github.com/go-delve/delve): `dlv cov core neo_client.elf core.1319`. Или можно [использовать](https://www.jetbrains.com/help/go/exploring-go-core-dumps.html) goland.
+Проще всего открыть дамп памяти в [delve](https://github.com/go-delve/delve): `dlv core neo_client.elf core.1319`. Или можно [использовать](https://www.jetbrains.com/help/go/exploring-go-core-dumps.html) goland.
 
 Открываем дамп в delve, и понимаем почему использовался странный билд `neo` вместо стандартного - у нас есть отладочная информация, что сильно упрощает жизнь, хотя в оригинальном neo она убирается при сборке.
 
@@ -246,3 +246,5 @@ grep -nri ctfcup output
 Решение не идеальное, потому что и расшифровка на самом деле падает с ошибкой (поэтому нужен именно `break`).
 
 Для идеального решения надо добыть полноценный pre-shared-key, чтобы автоматически расшифровывать полный траффик и извлекать абсолютно все данные, но это будет в следующей серии.
+
+Отдельное спасибо [@pomo-mondreganto](https://github.com/pomo-mondreganto) за шикарные утилиты, поставьте ему звездочку на гитхабе.
