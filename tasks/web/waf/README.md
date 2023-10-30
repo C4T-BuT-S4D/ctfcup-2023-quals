@@ -60,9 +60,35 @@ Content-Type: `application/json` и `application/x-www-form-urlencoded`.
 
 [Эксплойт](solve/vzlom.py)
 
-## Writeup (en)
+### Writeup (en)
 
-TODO
+### Author solution.
+
+#### SQL injection + WAF bypass.
+
+The challenge uses a WAF based on OpenResty that tries to block a query if it finds restricted characters in it.
+
+The WAF uses the `Content-Type` header to check the request body depending on the provided value.
+
+Downstream WAF there is a PHP application that is vulnerable to SQL-injection. The application also supports two types of content:
+Content-Type: `application/json` and `application/x-www-form-urlencoded`.
+
+The vulnerability is that the WAF code does not expect the Content-Type header to be encountered twice.
+In such a case, the [get_headers](https://github.com/openresty/lua-nginx-module#ngxreqget_headers) function returns a list of strings, not a string, and WAF will not be able to check the request body.
+
+However, PHP will still be able to understand such a query, so we can do a SQL-injection.
+
+#### RCE.
+
+Next we can get the RCE, because after we get the admin session using SQL-injection we will have access to the `exec()` function. 
+Using this, we would be able to write PHP-shell to a file using "ATTACH DATABASE".
+
+#### Additional Solution.
+
+In the public archive we have a database where we can find the password of the user `admin` in the command history.
+
+Knowing this password, we can go directly to the "RCE" step from the author's solution.
+
 
 [Эксплойт](solve/vzlom.py)
 

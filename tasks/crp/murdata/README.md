@@ -50,6 +50,35 @@ Hash-Length Extension + MurMur3(128 bit) preimage.
 
 Второе замечание — переменная окружения `SECRET` не определена в контейнере. Таким образом нам достаточно найти такую непустую строку, что ее хэш будет равен 0.
 
+### Writeup (en)
+
+### Author solution.
+
+App uses murmur3 hash to hash passwords. The hash is compared by converting a hash hex string to a number.
+
+An important fact to note is that int(murmur3(''')) = 0. That is, an empty string is hashed to 0.
+
+User passwords are stored in Redis. Redis will return an empty string if we request a password for a non-existent user.
+
+`hexdec('') = 0`, just like `hexdec(murmur3(''))) = 0`. Thus, we can log in as a non-existent user if we use an empty string as the password.
+
+The application will not let us use the empty string as a password, so we will have to find another string with murmur3 equal to 0.
+
+Next, we can bypass the two-factor authentication check using the Hash-Length-Extension attack.
+
+The overall steps of the exploit are:
+
+1. Use HLE to sign & add the `/../admin` string to your username.
+2. User with this username won't be present in Redis, so the redis returns an empty string.
+3. Pass a string as password such that its murmur3 hash is 0.
+4. Get the flag (using Path-Traversal in the username).
+
+### Alternative solution.
+
+You may notice that the `admin` password is actually empty, since the environment variable is declared after it is used.
+
+The second observation is that the `SECRET` environment variable is not defined in the container. Thus, we only need to find such a non-empty string that its hash will be equal to 0.
+
 
 ## Domain
 
